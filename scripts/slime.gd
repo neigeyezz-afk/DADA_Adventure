@@ -75,14 +75,16 @@ func _get_slime_texture(lvl: int) -> Texture2D:
 		path = "res://assets/sprites/slime_lv3_blue.png"
 	elif lvl >= 4:
 		path = "res://assets/sprites/slime_lv4_ivory.png"
-	if FileAccess.file_exists(path):
-		var img := Image.load_from_file(ProjectSettings.globalize_path(path))
-		if img and not img.is_empty():
-			return ImageTexture.create_from_image(img)
 	if ResourceLoader.exists(path):
 		var res = load(path)
 		if res is Texture2D:
 			return res
+	if FileAccess.file_exists(path):
+		var global_p := ProjectSettings.globalize_path(path)
+		if global_p != "":
+			var img := Image.load_from_file(global_p)
+			if img and not img.is_empty():
+				return ImageTexture.create_from_image(img)
 	return null
 
 func _apply_level() -> void:

@@ -130,14 +130,16 @@ func _create_visuals() -> void:
 
 func _get_texture_from_paths(candidate_paths: Array[String]) -> Texture2D:
 	for path in candidate_paths:
-		if FileAccess.file_exists(path):
-			var img := Image.load_from_file(ProjectSettings.globalize_path(path))
-			if img and not img.is_empty():
-				return ImageTexture.create_from_image(img)
 		if ResourceLoader.exists(path):
 			var res = load(path)
 			if res is Texture2D:
 				return res
+		if FileAccess.file_exists(path):
+			var global_p := ProjectSettings.globalize_path(path)
+			if global_p != "":
+				var img := Image.load_from_file(global_p)
+				if img and not img.is_empty():
+					return ImageTexture.create_from_image(img)
 	return null
 
 # 정지 시 사용하는 단일 포즈 텍스처 (기존 player.png 계열)
