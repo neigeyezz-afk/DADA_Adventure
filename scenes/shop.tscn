@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/shop.gd" id="1_shop"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_shop"]
+size = Vector2(64, 96)
+
+[node name="Shop" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_shop")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -32.0
+offset_top = -48.0
+offset_right = 32.0
+offset_bottom = 48.0
+color = Color(0.6, 0.4, 0.8, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_shop")
+
+[node name="Prompt" type="Label" parent="."]
+offset_left = -60.0
+offset_top = -86.0
+offset_right = 60.0
+offset_bottom = -58.0
+text = "↑ Tori's Shop"
+horizontal_alignment = 1

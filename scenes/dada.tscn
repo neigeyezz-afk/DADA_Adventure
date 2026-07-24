@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3 uid="uid://i58iihdhelcr"]
+
+[ext_resource type="Script" uid="uid://bjdsqq0eu2tk8" path="res://scripts/dada.gd" id="1_457pe"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(32, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sword"]
+size = Vector2(30, 44)
+
+[node name="DADA" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_457pe")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+offset_right = 32.0
+offset_bottom = 64.0
+color = Color(0.55, 0.6, 0.7, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(16, 32)
+scale = Vector2(0.075, 0.075)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(16, 32)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(16, 32)
+limit_left = 0
+limit_top = -400
+limit_right = 6400
+limit_bottom = 120
+
+[node name="Sword" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 16
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword"]
+position = Vector2(46, 26)
+shape = SubResource("RectangleShape2D_sword")
+
+[node name="ColorRect" type="ColorRect" parent="Sword"]
+visible = false
+mouse_filter = 2
+color = Color(1, 1, 0.4, 0.85)

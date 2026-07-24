@@ -1,0 +1,396 @@
+[gd_scene format=3 uid="uid://bs1k6bha3wg5h"]
+
+[ext_resource type="PackedScene" uid="uid://i58iihdhelcr" path="res://scenes/dada.tscn" id="1_dada"]
+[ext_resource type="PackedScene" path="res://scenes/slime.tscn" id="2_slime"]
+[ext_resource type="PackedScene" path="res://scenes/secret_spot.tscn" id="3_secret"]
+[ext_resource type="PackedScene" path="res://scenes/hidden_door.tscn" id="4_door"]
+[ext_resource type="PackedScene" path="res://scenes/shop.tscn" id="5_shop"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="6_hud"]
+[ext_resource type="Script" uid="uid://b8p560rd17f7c" path="res://scripts/pit_zone.gd" id="7_pit"]
+[ext_resource type="Script" uid="uid://dkv24yoe630eh" path="res://scripts/stage_timer.gd" id="8_timer"]
+[ext_resource type="Script" uid="uid://baffuu3o51uq0" path="res://scripts/spike_hazard.gd" id="9_spike"]
+[ext_resource type="Script" uid="uid://d2x11j1ho4u0k" path="res://scripts/moving_platform.gd" id="10_moving"]
+[ext_resource type="PackedScene" path="res://scenes/coin_box.tscn" id="11_coinbox"]
+[ext_resource type="PackedScene" path="res://scenes/shop_entrance.tscn" id="12_entrance"]
+[ext_resource type="PackedScene" path="res://scenes/room_exit.tscn" id="13_exit"]
+[ext_resource type="Texture2D" uid="uid://w0tu0pfqvs2d" path="res://assets/sprites/ground_tile_2.png" id="15_ground2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floorA"]
+size = Vector2(2650, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pit"]
+size = Vector2(180, 640)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floorB"]
+size = Vector2(1620, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spike"]
+size = Vector2(180, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floorC"]
+size = Vector2(1770, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat_split"]
+size = Vector2(296, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat"]
+size = Vector2(720, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat2"]
+size = Vector2(280, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat4"]
+size = Vector2(200, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_roomfloor"]
+size = Vector2(800, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_roomwall"]
+size = Vector2(20, 200)
+
+[node name="TestWorld" type="Node2D" unique_id=1618266778]
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=394121252]
+collision_mask = 0
+
+[node name="ColorRect" type="TextureRect" parent="Floor" unique_id=625103616]
+offset_right = 2650.0
+offset_bottom = 60.0
+texture = ExtResource("15_ground2")
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1948129663]
+position = Vector2(1325, 30)
+shape = SubResource("RectangleShape2D_floorA")
+
+[node name="PitZone" type="Area2D" parent="." unique_id=1374013278]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("7_pit")
+
+[node name="ColorRect" type="ColorRect" parent="PitZone" unique_id=1387453774]
+offset_left = 2650.0
+offset_top = 60.0
+offset_right = 2830.0
+offset_bottom = 700.0
+color = Color(0.05, 0.05, 0.08, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PitZone" unique_id=646897203]
+position = Vector2(2740, 380)
+shape = SubResource("RectangleShape2D_pit")
+
+[node name="Floor2" type="StaticBody2D" parent="." unique_id=1057660630]
+position = Vector2(2830, 0)
+collision_mask = 0
+
+[node name="ColorRect" type="TextureRect" parent="Floor2" unique_id=205978056]
+offset_right = 1620.0
+offset_bottom = 60.0
+texture = ExtResource("15_ground2")
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2" unique_id=317323332]
+position = Vector2(810, 30)
+shape = SubResource("RectangleShape2D_floorB")
+
+[node name="Pit2Void" type="ColorRect" parent="." unique_id=1681398241]
+offset_left = 4450.0
+offset_top = 60.0
+offset_right = 4630.0
+offset_bottom = 640.0
+color = Color(0.05, 0.05, 0.08, 1)
+
+[node name="SpikeHazard" type="Area2D" parent="." unique_id=235803205]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("9_spike")
+
+[node name="ColorRect" type="ColorRect" parent="SpikeHazard" unique_id=742905567]
+offset_left = 4450.0
+offset_top = 640.0
+offset_right = 4630.0
+offset_bottom = 700.0
+color = Color(0.6, 0.15, 0.15, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpikeHazard" unique_id=1275374563]
+position = Vector2(4540, 670)
+shape = SubResource("RectangleShape2D_spike")
+
+[node name="Floor3" type="StaticBody2D" parent="." unique_id=309750878]
+position = Vector2(4630, 0)
+collision_mask = 0
+
+[node name="ColorRect" type="TextureRect" parent="Floor3" unique_id=1686143231]
+offset_right = 1770.0
+offset_bottom = 60.0
+texture = ExtResource("15_ground2")
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3" unique_id=980002307]
+position = Vector2(885, 30)
+shape = SubResource("RectangleShape2D_floorC")
+
+[node name="Platform" type="StaticBody2D" parent="." unique_id=1840450348]
+position = Vector2(3588, -77)
+collision_mask = 0
+
+[node name="ColorRect" type="TextureRect" parent="Platform" unique_id=312785226]
+offset_left = -148.0
+offset_top = -12.0
+offset_right = 148.0
+offset_bottom = 12.0
+texture = ExtResource("15_ground2")
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform" unique_id=256737587]
+shape = SubResource("RectangleShape2D_plat_split")
+
+[node name="Platform5" type="StaticBody2D" parent="." unique_id=1037146811]
+position = Vector2(4012, -77)
+collision_mask = 0
+
+[node name="ColorRect" type="TextureRect" parent="Platform5" unique_id=2119670199]
+offset_left = -148.0
+offset_top = -12.0
+offset_right = 148.0
+offset_bottom = 12.0
+texture = ExtResource("15_ground2")
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform5" unique_id=1151633203]
+shape = SubResource("RectangleShape2D_plat_split")
+
+[node name="Platform3" type="StaticBody2D" parent="." unique_id=285979763]
+position = Vector2(1400, -77)
+collision_mask = 0
+
+[node name="ColorRect" type="TextureRect" parent="Platform3" unique_id=1564996903]
+offset_left = -360.0
+offset_top = -12.0
+offset_right = 360.0
+offset_bottom = 12.0
+texture = ExtResource("15_ground2")
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3" unique_id=786522902]
+shape = SubResource("RectangleShape2D_plat")
+
+[node name="Platform2" type="AnimatableBody2D" parent="." unique_id=840905299]
+position = Vector2(3800, -167)
+collision_mask = 0
+script = ExtResource("10_moving")
+
+[node name="ColorRect" type="TextureRect" parent="Platform2" unique_id=396858341]
+offset_left = -140.0
+offset_top = -12.0
+offset_right = 140.0
+offset_bottom = 12.0
+texture = ExtResource("15_ground2")
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2" unique_id=705576994]
+shape = SubResource("RectangleShape2D_plat2")
+
+[node name="Platform4" type="StaticBody2D" parent="." unique_id=1917534366]
+position = Vector2(3800, -257)
+collision_mask = 0
+
+[node name="ColorRect" type="TextureRect" parent="Platform4" unique_id=1781804364]
+offset_left = -100.0
+offset_top = -12.0
+offset_right = 100.0
+offset_bottom = 12.0
+texture = ExtResource("15_ground2")
+stretch_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform4" unique_id=1213454870]
+shape = SubResource("RectangleShape2D_plat4")
+
+[node name="CoinBox" parent="." unique_id=1566102600 instance=ExtResource("11_coinbox")]
+position = Vector2(3800, -269)
+coin_value = 2
+
+[node name="DADA" parent="." unique_id=1821650705 instance=ExtResource("1_dada")]
+position = Vector2(480, -90)
+max_health = 7
+
+[node name="Slime" parent="." unique_id=221939361 instance=ExtResource("2_slime")]
+position = Vector2(620, -16)
+max_health = 1
+
+[node name="Slime2" parent="." unique_id=1473488044 instance=ExtResource("2_slime")]
+position = Vector2(750, -16)
+max_health = 1
+
+[node name="Slime3" parent="." unique_id=54479284 instance=ExtResource("2_slime")]
+position = Vector2(880, -16)
+max_health = 1
+
+[node name="Slime4Lv2" parent="." unique_id=1177768328 instance=ExtResource("2_slime")]
+position = Vector2(1400, -105)
+max_health = 2
+level = 2
+
+[node name="Slime5" parent="." unique_id=1513976896 instance=ExtResource("2_slime")]
+position = Vector2(2100, -16)
+max_health = 1
+
+[node name="Slime6" parent="." unique_id=1197250356 instance=ExtResource("2_slime")]
+position = Vector2(2450, -16)
+max_health = 1
+
+[node name="Slime7" parent="." unique_id=917807406 instance=ExtResource("2_slime")]
+position = Vector2(3040, -16)
+max_health = 1
+
+[node name="Slime8Lv2" parent="." unique_id=1859820275 instance=ExtResource("2_slime")]
+position = Vector2(3700, -105)
+max_health = 2
+level = 2
+
+[node name="Slime9Lv3" parent="." unique_id=1413858077 instance=ExtResource("2_slime")]
+position = Vector2(3800, -195)
+material_drop = 2
+level = 3
+
+[node name="Slime10" parent="." unique_id=881403548 instance=ExtResource("2_slime")]
+position = Vector2(4300, -16)
+max_health = 1
+
+[node name="Slime11" parent="." unique_id=1059948111 instance=ExtResource("2_slime")]
+position = Vector2(4720, -16)
+max_health = 1
+
+[node name="Slime12" parent="." unique_id=2049930206 instance=ExtResource("2_slime")]
+position = Vector2(5550, -16)
+max_health = 1
+
+[node name="Slime13Lv3" parent="." unique_id=503898191 instance=ExtResource("2_slime")]
+position = Vector2(5700, -16)
+material_drop = 2
+level = 3
+
+[node name="Slime14" parent="." unique_id=396969825 instance=ExtResource("2_slime")]
+position = Vector2(6100, -16)
+max_health = 1
+
+[node name="SecretSpot" parent="." unique_id=1855744795 instance=ExtResource("3_secret")]
+position = Vector2(1920, -120)
+
+[node name="ShopEntrance" parent="." unique_id=1880348070 instance=ExtResource("12_entrance")]
+position = Vector2(5280, -48)
+room_entry_position = Vector2(6650, 1096)
+room_limit_left = 6600.0
+room_limit_top = 960.0
+room_limit_right = 7400.0
+room_limit_bottom = 1220.0
+
+[node name="HiddenDoor" parent="." unique_id=1563240578 instance=ExtResource("4_door")]
+position = Vector2(5920, -48)
+room_entry_position = Vector2(7650, 1096)
+room_limit_left = 7600.0
+room_limit_top = 960.0
+room_limit_right = 8400.0
+room_limit_bottom = 1220.0
+
+[node name="HUD" parent="." unique_id=219194392 instance=ExtResource("6_hud")]
+
+[node name="StageTimer" type="Node" parent="." unique_id=925461382]
+script = ExtResource("8_timer")
+
+[node name="ShopRoom" type="Node2D" parent="." unique_id=1881113445]
+
+[node name="Floor" type="StaticBody2D" parent="ShopRoom" unique_id=1585198957]
+position = Vector2(6600, 1160)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="ShopRoom/Floor" unique_id=682262568]
+offset_right = 800.0
+offset_bottom = 60.0
+color = Color(0.5, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShopRoom/Floor" unique_id=1310757642]
+position = Vector2(400, 30)
+shape = SubResource("RectangleShape2D_roomfloor")
+
+[node name="LeftWall" type="StaticBody2D" parent="ShopRoom" unique_id=967915574]
+position = Vector2(6600, 1060)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="ShopRoom/LeftWall" unique_id=1383368527]
+offset_left = -10.0
+offset_top = -100.0
+offset_right = 10.0
+offset_bottom = 100.0
+color = Color(0.3, 0.2, 0.15, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShopRoom/LeftWall" unique_id=1942999489]
+shape = SubResource("RectangleShape2D_roomwall")
+
+[node name="RightWall" type="StaticBody2D" parent="ShopRoom" unique_id=1670304314]
+position = Vector2(7400, 1060)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="ShopRoom/RightWall" unique_id=1955599742]
+offset_left = -10.0
+offset_top = -100.0
+offset_right = 10.0
+offset_bottom = 100.0
+color = Color(0.3, 0.2, 0.15, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShopRoom/RightWall" unique_id=626273796]
+shape = SubResource("RectangleShape2D_roomwall")
+
+[node name="Shop" parent="ShopRoom" unique_id=1087515964 instance=ExtResource("5_shop")]
+position = Vector2(6700, 1112)
+
+[node name="RoomExit" parent="ShopRoom" unique_id=426999181 instance=ExtResource("13_exit")]
+position = Vector2(7300, 1096)
+
+[node name="HiddenRoom" type="Node2D" parent="." unique_id=71770049]
+
+[node name="Floor" type="StaticBody2D" parent="HiddenRoom" unique_id=520582451]
+position = Vector2(7600, 1160)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="HiddenRoom/Floor" unique_id=1730468877]
+offset_right = 800.0
+offset_bottom = 60.0
+color = Color(0.15, 0.12, 0.18, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HiddenRoom/Floor" unique_id=1133147447]
+position = Vector2(400, 30)
+shape = SubResource("RectangleShape2D_roomfloor")
+
+[node name="LeftWall" type="StaticBody2D" parent="HiddenRoom" unique_id=170460455]
+position = Vector2(7600, 1060)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="HiddenRoom/LeftWall" unique_id=713287370]
+offset_left = -10.0
+offset_top = -100.0
+offset_right = 10.0
+offset_bottom = 100.0
+color = Color(0.25, 0.2, 0.3, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HiddenRoom/LeftWall" unique_id=292909039]
+shape = SubResource("RectangleShape2D_roomwall")
+
+[node name="RightWall" type="StaticBody2D" parent="HiddenRoom" unique_id=1800350458]
+position = Vector2(8400, 1060)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="HiddenRoom/RightWall" unique_id=1782386214]
+offset_left = -10.0
+offset_top = -100.0
+offset_right = 10.0
+offset_bottom = 100.0
+color = Color(0.25, 0.2, 0.3, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HiddenRoom/RightWall" unique_id=1499669423]
+shape = SubResource("RectangleShape2D_roomwall")
+
+[node name="RoomExit" parent="HiddenRoom" unique_id=1898000745 instance=ExtResource("13_exit")]
+position = Vector2(8300, 1096)
+
+[connection signal="opened" from="HiddenDoor" to="StageTimer" method="_on_stage_cleared"]

@@ -1,0 +1,11 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Binaries and large executables (GitHub 100MB limit)
+*.exe
+*.dll
+
+# IDE & local agent folders
+.claude/
+
