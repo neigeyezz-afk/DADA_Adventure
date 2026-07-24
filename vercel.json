@@ -1,9 +1,5 @@
 {
   "version": 2,
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/", "destination": "/DADA_Adventure.html" }
-  ],
   "headers": [
     {
       "source": "/(.*)",
