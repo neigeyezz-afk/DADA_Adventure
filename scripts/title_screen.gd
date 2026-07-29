@@ -152,21 +152,26 @@ func _save_google_config() -> void:
 		file.close()
 
 func _on_google_login_pressed() -> void:
+	if _logged_in:
+		return
 	if SoundManager:
 		SoundManager.play_buy()
 	_start_google_oauth_process()
 
 func _on_web_oauth_pressed() -> void:
+	if _logged_in:
+		return
 	_start_google_oauth_process()
 
 func _start_google_oauth_process() -> void:
+	if _logged_in:
+		return
 	_save_google_config()
 	var redirect_uri := "https://dada-adventure-nine.vercel.app"
 	var oauth_url := "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&response_type=token&scope=email%%20profile" % [google_client_id.strip_edges().uri_encode(), redirect_uri.uri_encode()]
 
 	if OS.has_feature("web") or OS.get_name() == "Web":
 		JavaScriptBridge.eval("window.open('" + oauth_url + "', 'GoogleAuth', 'width=520,height=620');")
-		# 웹인증 시 로그인 완료 상태를 데이터베이스에 즉시 기록하고 메인 화면으로 복귀
 		_register_external_google_user("Google Authenticated User", "external_user@google.com")
 	else:
 		_tcp_server = TCPServer.new()
@@ -192,7 +197,6 @@ func _register_external_google_user(account_name: String, account_email: String,
 	_user_name = account_name
 	_user_email = account_email
 	
-	# 데이터베이스 (user://user_database.json) 기록 및 세션 저장
 	if GameState and GameState.has_method("record_user_to_database"):
 		GameState.record_user_to_database(_user_name, _user_email)
 	elif GameState and GameState.has_method("save_user_session"):
@@ -203,16 +207,21 @@ func _register_external_google_user(account_name: String, account_email: String,
 	if SoundManager:
 		SoundManager.play_cook_success()
 	
-	# 메인 타이틀 화면으로 계속 복귀 유지 (자동으로 게임을 시작하지 않음)
 	_update_ui_state()
 
 func _update_ui_state() -> void:
 	if _logged_in:
-		user_status_label.text = "✅ Google 로그인 완료: DB 기록됨 - 아래 'New Game'을 클릭하여 시작하세요"
+		user_status_label.text = "✅ Google 로그인 완료! 'New Game'을 클릭하여 시작하세요"
 		user_status_label.add_theme_color_override("font_color", Color(0.3, 0.95, 0.45))
+		if is_instance_valid(google_login_btn):
+			google_login_btn.disabled = true
+			google_login_btn.mouse_default_cursor_shape = Control.CURSOR_ARROW
 	else:
-		user_status_label.text = "🔒 구글 로그인이 필요합니다 ('Sign in with Google' 클릭)"
+		user_status_label.text = "🔒 아래 구글 로그인 후에 'New Game'을 클릭하여 시작하세요"
 		user_status_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.4))
+		if is_instance_valid(google_login_btn):
+			google_login_btn.disabled = false
+			google_login_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 func _on_new_game_pressed() -> void:
 	if not _logged_in:
