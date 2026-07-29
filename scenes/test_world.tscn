@@ -13,7 +13,10 @@
 [ext_resource type="PackedScene" path="res://scenes/coin_box.tscn" id="11_coinbox"]
 [ext_resource type="PackedScene" path="res://scenes/shop_entrance.tscn" id="12_entrance"]
 [ext_resource type="PackedScene" path="res://scenes/room_exit.tscn" id="13_exit"]
+[ext_resource type="PackedScene" path="res://scenes/golem.tscn" id="14_golem"]
 [ext_resource type="Texture2D" uid="uid://w0tu0pfqvs2d" path="res://assets/sprites/ground_tile_2.png" id="15_ground2"]
+[ext_resource type="PackedScene" path="res://scenes/mole.tscn" id="15_mole"]
+[ext_resource type="PackedScene" path="res://scenes/king_slime.tscn" id="17_king"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floorA"]
 size = Vector2(2650, 60)
@@ -47,6 +50,9 @@ size = Vector2(800, 60)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_roomwall"]
 size = Vector2(20, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_endwall"]
+size = Vector2(60, 1000)
 
 [node name="TestWorld" type="Node2D" unique_id=1618266778]
 
@@ -218,10 +224,6 @@ max_health = 7
 position = Vector2(620, -16)
 max_health = 1
 
-[node name="Slime2" parent="." unique_id=1473488044 instance=ExtResource("2_slime")]
-position = Vector2(750, -16)
-max_health = 1
-
 [node name="Slime3" parent="." unique_id=54479284 instance=ExtResource("2_slime")]
 position = Vector2(880, -16)
 max_health = 1
@@ -278,7 +280,7 @@ max_health = 1
 position = Vector2(1920, -120)
 
 [node name="ShopEntrance" parent="." unique_id=1880348070 instance=ExtResource("12_entrance")]
-position = Vector2(5280, -48)
+position = Vector2(6200, -48)
 room_entry_position = Vector2(6650, 1096)
 room_limit_left = 6600.0
 room_limit_top = 960.0
@@ -392,5 +394,28 @@ shape = SubResource("RectangleShape2D_roomwall")
 
 [node name="RoomExit" parent="HiddenRoom" unique_id=1898000745 instance=ExtResource("13_exit")]
 position = Vector2(8300, 1096)
+
+[node name="EndWall" type="StaticBody2D" parent="." unique_id=991827364]
+position = Vector2(6300, -300)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="EndWall" unique_id=1544740091]
+offset_left = -30.0
+offset_top = -600.0
+offset_right = 300.0
+offset_bottom = 600.0
+color = Color(0.2, 0.15, 0.12, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EndWall" unique_id=22568940]
+shape = SubResource("RectangleShape2D_endwall")
+
+[node name="Golem1" parent="." unique_id=1810292080 instance=ExtResource("14_golem")]
+position = Vector2(1800, -24)
+
+[node name="Mole1" parent="." unique_id=761363853 instance=ExtResource("15_mole")]
+position = Vector2(3400, -12)
+
+[node name="KingSlimeBoss" parent="." unique_id=1309684113 instance=ExtResource("17_king")]
+position = Vector2(5600, -40)
 
 [connection signal="opened" from="HiddenDoor" to="StageTimer" method="_on_stage_cleared"]

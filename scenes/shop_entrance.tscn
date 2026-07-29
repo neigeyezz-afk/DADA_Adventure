@@ -45,3 +45,18 @@ theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
 horizontal_alignment = 1
 vertical_alignment = 1
 text = "Shop Lv 1"
+
+[node name="CampfireEmber" type="CPUParticles2D" parent="."]
+position = Vector2(0, 30)
+amount = 16
+lifetime = 1.2
+emission_shape = 1
+emission_sphere_radius = 8.0
+direction = Vector2(0, -1)
+spread = 15.0
+gravity = Vector2(0, -40)
+initial_velocity_min = 20.0
+initial_velocity_max = 40.0
+scale_amount_min = 2.0
+scale_amount_max = 4.0
+color = Color(1.0, 0.65, 0.2, 0.8)

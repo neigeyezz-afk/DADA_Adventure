@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name PlayerDADA
 
+const FloatingText = preload("res://scripts/floating_text.gd")
+
 # ==========================================================
 # 1. 이동 및 물리 상수 (디자이너가 밸런스를 잡기 쉽도록 export)
 # ==========================================================
@@ -70,6 +72,7 @@ var _room_paused_timer: bool = false
 
 func _ready() -> void:
 	add_to_group("player")
+	_ensure_sprite_files_copied()
 	health = max_health
 	spawn_point = global_position
 	sword.monitoring = false
@@ -82,11 +85,26 @@ func _ready() -> void:
 		sprite.scale = BASE_SPRITE_SCALE
 	health_changed.emit(health, max_health)
 
+func _ensure_sprite_files_copied() -> void:
+	var files: Array[String] = [
+		"player.png", "player.png.import",
+		"player_empty.png", "player_empty.png.import",
+		"player_filled.png", "player_filled.png.import",
+		"player_character_sheet.png", "player_character_sheet.png.import",
+		"player_character_sheet_empty.png", "player_character_sheet_empty.png.import",
+		"player_walk_spritesheet.png", "player_walk_spritesheet.png.import",
+		"player_walk_spritesheet_empty.png", "player_walk_spritesheet_empty.png.import"
+	]
+	for f in files:
+		var src := "res://assets/sprites/x/" + f
+		var dst := "res://assets/sprites/" + f
+		if FileAccess.file_exists(src) and not FileAccess.file_exists(dst):
+			DirAccess.copy_absolute(src, dst)
+
 func _create_visuals() -> void:
 	if is_instance_valid(sprite):
-		sprite.visible = true
-		sprite.position = Vector2(16, 32)
-		sprite.rotation_degrees = 0.0
+		sprite.visible = false
+	if is_instance_valid(_visual_root):
 		return
 	_visual_root = Node2D.new()
 	_visual_root.name = "Visuals"
@@ -128,59 +146,107 @@ func _create_visuals() -> void:
 	_right_arm.color = Color(0.95, 0.85, 0.45)
 	_visual_root.add_child(_right_arm)
 
+var _texture_cache: Dictionary = {}
+
 func _get_texture_from_paths(candidate_paths: Array[String]) -> Texture2D:
 	for path in candidate_paths:
+		if _texture_cache.has(path):
+			return _texture_cache[path]
+		var global_p := ProjectSettings.globalize_path(path)
+		if global_p != "" and FileAccess.file_exists(path):
+			var img := Image.load_from_file(global_p)
+			if img and not img.is_empty():
+				_remove_white_bg(img)
+				var tex := ImageTexture.create_from_image(img)
+				_texture_cache[path] = tex
+				return tex
 		if ResourceLoader.exists(path):
 			var res = load(path)
 			if res is Texture2D:
-				return res
-		if FileAccess.file_exists(path):
-			var global_p := ProjectSettings.globalize_path(path)
-			if global_p != "":
-				var img := Image.load_from_file(global_p)
+				var img: Image = (res as Texture2D).get_image()
 				if img and not img.is_empty():
-					return ImageTexture.create_from_image(img)
+					_remove_white_bg(img)
+					var tex := ImageTexture.create_from_image(img)
+					_texture_cache[path] = tex
+					return tex
+				_texture_cache[path] = res as Texture2D
+				return res as Texture2D
 	return null
 
-# 정지 시 사용하는 단일 포즈 텍스처 (기존 player.png 계열)
-func _get_idle_texture(is_filled: bool = false) -> Texture2D:
-	var candidate_paths: Array[String] = []
-	if is_filled:
-		candidate_paths = ["res://assets/sprites/player_filled.png", "res://assets/sprites/player.png", "res://assets/sprites/player_character_sheet.png"]
-	else:
-		candidate_paths = ["res://assets/sprites/player.png", "res://assets/sprites/player_empty.png", "res://assets/sprites/player_character_sheet_empty.png"]
+func _remove_white_bg(img: Image) -> void:
+	if img == null or img.is_empty():
+		return
+	img.convert(Image.FORMAT_RGBA8)
+	var w := img.get_width()
+	var h := img.get_height()
+	for y in range(h):
+		for x in range(w):
+			var col := img.get_pixel(x, y)
+			if col.r > 0.94 and col.g > 0.94 and col.b > 0.94 and col.a > 0.1:
+				col.a = 0.0
+				img.set_pixel(x, y, col)
+
+# 정지 시 사용하는 단일 포즈 텍스처 (player_fan.png 우선)
+func _get_idle_texture(_is_filled: bool = false) -> Texture2D:
+	var candidate_paths: Array[String] = [
+		"res://assets/sprites/player_fan.png",
+		"res://assets/sprites/player_filled.png" if _is_filled else "res://assets/sprites/player.png",
+		"res://assets/sprites/player.png"
+	]
 	return _get_texture_from_paths(candidate_paths)
 
-# 이동 중 사용하는 8프레임 걷기 스프라이트시트 (팔다리 스윙 모션)
-func _get_walk_texture(is_filled: bool = false) -> Texture2D:
-	var path := "res://assets/sprites/player_walk_spritesheet.png" if is_filled else "res://assets/sprites/player_walk_spritesheet_empty.png"
-	return _get_texture_from_paths([path])
+# 이동 중 사용하는 텍스처 (player Pot Knight.png 우선)
+func _get_walk_texture(_is_filled: bool = false) -> Texture2D:
+	var candidate_paths: Array[String] = [
+		"res://assets/sprites/player Pot Knight.png",
+		"res://assets/sprites/player_walk_spritesheet.png"
+	]
+	return _get_texture_from_paths(candidate_paths)
 
 func _setup_sprite_texture() -> void:
 	if is_instance_valid(sprite):
-		_apply_sprite_mode(false)
-		sprite.visible = sprite.texture != null
-		if is_instance_valid(body_rect):
-			body_rect.visible = sprite.texture == null
+		sprite.visible = false
+	if is_instance_valid(body_rect):
+		body_rect.visible = true
 
-# 정지<->이동 텍스처 전환 및 걷기 프레임 갱신 (텍스처는 모드가 바뀔 때만 재할당)
-# 걷기 시트는 프레임 단위로 잘려 idle 텍스처보다 원본 픽셀 크기가 작으므로,
-# 두 텍스처의 실제 높이를 비교해 화면상 캐릭터 크기가 변하지 않도록 배율을 보정한다.
+# 정지<->이동 텍스처 전환 및 걷기 프레임 갱신
 func _apply_sprite_mode(is_walking_anim: bool) -> void:
 	var wanted_key := ("walk_" if is_walking_anim else "idle_") + ("filled" if _is_filled_pot else "empty")
 	if wanted_key == _sprite_mode_key:
-		if is_walking_anim:
-			sprite.frame = int(fmod(_walk_cycle, TAU) / TAU * WALK_FRAME_COUNT) % WALK_FRAME_COUNT
+		if is_walking_anim and sprite.hframes * sprite.vframes > 1:
+			var frame_cnt := sprite.hframes * sprite.vframes
+			sprite.frame = int(fmod(_walk_cycle, TAU) / TAU * frame_cnt) % frame_cnt
 		return
 	if is_walking_anim:
 		var walk_tex := _get_walk_texture(_is_filled_pot)
 		if walk_tex:
 			sprite.texture = walk_tex
-			sprite.hframes = WALK_HFRAMES
-			sprite.vframes = WALK_VFRAMES
-			sprite.frame = int(fmod(_walk_cycle, TAU) / TAU * WALK_FRAME_COUNT) % WALK_FRAME_COUNT
+			var w := float(walk_tex.get_width())
+			var h := float(walk_tex.get_height())
+			var ratio := w / maxf(1.0, h)
+			
+			# 스프라이트시트 그리드 자동 판별 (4x2, 4x1, 2x2, 1x1)
+			if ratio >= 1.8 and ratio <= 2.2:
+				sprite.hframes = 4
+				sprite.vframes = 2
+			elif ratio >= 3.5:
+				sprite.hframes = 4
+				sprite.vframes = 1
+			elif ratio >= 1.3 and ratio <= 1.7:
+				sprite.hframes = 2
+				sprite.vframes = 1
+			else:
+				sprite.hframes = 1
+				sprite.vframes = 1
+				
+			var frame_cnt := sprite.hframes * sprite.vframes
+			if frame_cnt > 1:
+				sprite.frame = int(fmod(_walk_cycle, TAU) / TAU * frame_cnt) % frame_cnt
+			else:
+				sprite.frame = 0
+
 			var idle_tex := _get_idle_texture(_is_filled_pot)
-			var walk_frame_height := float(walk_tex.get_height()) / float(WALK_VFRAMES)
+			var walk_frame_height := h / float(sprite.vframes)
 			_sprite_scale_multiplier = float(idle_tex.get_height()) / walk_frame_height if idle_tex and walk_frame_height > 0.0 else 1.0
 			_sprite_mode_key = wanted_key
 	else:
@@ -206,6 +272,8 @@ func _physics_process(delta: float) -> void:
 	# 점프
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = jump_velocity
+		if SoundManager:
+			SoundManager.play_jump()
 
 	# 공격
 	if Input.is_action_just_pressed("attack"):
@@ -265,7 +333,10 @@ func _update_visuals(delta: float) -> void:
 			sprite_scale_x = -0.02
 			sprite_scale_y = 0.05
 		sprite.rotation_degrees = attack_tilt
-		sprite.scale = BASE_SPRITE_SCALE * _sprite_scale_multiplier * Vector2(1.0 + sprite_scale_x, 1.0 + sprite_scale_y)
+		var frame_h: float = float(sprite.texture.get_height()) / maxf(1.0, float(sprite.vframes))
+		var base_scale_factor: float = 64.0 / frame_h if frame_h > 0.0 else 0.075
+		var base_scale := Vector2(base_scale_factor, base_scale_factor)
+		sprite.scale = base_scale * _sprite_scale_multiplier * Vector2(1.0 + sprite_scale_x, 1.0 + sprite_scale_y)
 		return
 	if not is_instance_valid(_visual_root):
 		return
@@ -309,6 +380,8 @@ func _attack() -> void:
 	_already_hit.clear()
 	_position_sword()
 	sword.monitoring = true
+	if SoundManager:
+		SoundManager.play_attack()
 
 	# 물리 프레임을 한 번 넘겨 겹침 상태를 반영한 뒤, 이미 겹쳐 있던 대상도 즉시 타격
 	await get_tree().physics_frame
@@ -367,6 +440,9 @@ func take_damage(amount: int, attack_direction: Vector2) -> void:
 
 	health = max(0, health - amount)
 	health_changed.emit(health, max_health)
+	if SoundManager:
+		SoundManager.play_hit()
+	FloatingText.spawn(get_parent(), global_position, "-%d HP" % amount, Color(1, 0.35, 0.35))
 
 	# 넉백
 	velocity.x = signf(attack_direction.x) * 220.0

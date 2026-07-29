@@ -13,9 +13,14 @@ extends CanvasLayer
 @onready var recipe_info: Label = $ShopPanel/RecipeInfo
 @onready var sell_button: Button = $ShopPanel/SellButton
 @onready var buy_button: Button = $ShopPanel/BuyButton
+@onready var upgrade_pot_button: Button = get_node_or_null("ShopPanel/UpgradePotButton")
 @onready var cook_button: Button = $ShopPanel/CookButton
 
 @onready var game_over_panel: ColorRect = $GameOverPanel
+@onready var recipe_book_button: Button = get_node_or_null("Top/RecipeBookButton")
+@onready var recipe_book_panel: Panel = get_node_or_null("RecipeBookPanel")
+@onready var recipe_book_content: RichTextLabel = get_node_or_null("RecipeBookPanel/Content")
+@onready var recipe_book_close: Button = get_node_or_null("RecipeBookPanel/CloseButton")
 
 var _cook_active: bool = false
 var _cook_recipe_name: String = ""
@@ -25,13 +30,22 @@ var _cook_total_time: float = 0.0
 func _ready() -> void:
 	add_to_group("hud")
 	shop_panel.visible = false
+	if is_instance_valid(recipe_book_panel):
+		recipe_book_panel.visible = false
 	GameState.gold_changed.connect(func(_v: int) -> void: _refresh())
 	GameState.materials_changed.connect(func(_v: int) -> void: _refresh())
 	GameState.weapon_changed.connect(func(_v: int) -> void: _refresh())
+	GameState.pot_changed.connect(func(_lvl: int, _info: Dictionary) -> void: _refresh())
 	GameState.ramen_crafted.connect(func(_v: int) -> void: _refresh())
 	sell_button.pressed.connect(_on_sell)
 	buy_button.pressed.connect(_on_buy)
+	if is_instance_valid(upgrade_pot_button):
+		upgrade_pot_button.pressed.connect(_on_upgrade_pot)
 	cook_button.pressed.connect(_on_cook)
+	if is_instance_valid(recipe_book_button):
+		recipe_book_button.pressed.connect(toggle_recipe_book)
+	if is_instance_valid(recipe_book_close):
+		recipe_book_close.pressed.connect(close_recipe_book)
 	_refresh()
 	# 플레이어/타이머가 그룹에 등록된 뒤(다음 프레임) 시그널 연결
 	call_deferred("_connect_player")
@@ -79,16 +93,16 @@ func _on_stage_cleared() -> void:
 
 func _refresh() -> void:
 	gold_label.text = "Gold  %d" % GameState.gold
-	mat_label.text = "Mana Stone  %d" % GameState.materials
+	mat_label.text = "Materials  %d/%d (%s)" % [GameState.materials, GameState.get_max_capacity(), GameState.get_pot()["name"]]
 	weapon_label.text = "Weapon  %s" % GameState.get_weapon()["name"]
 	if shop_panel.visible:
 		_refresh_shop()
 
 func _refresh_shop() -> void:
-	shop_info.text = "Gold %d   |   Materials %d\nSell Price: 1 = %d Gold" % [
-		GameState.gold, GameState.materials, GameState.MATERIAL_SELL_PRICE
+	shop_info.text = "Gold %d | Materials %d/%d (%s)\nSell Price: 1 = %d Gold" % [
+		GameState.gold, GameState.materials, GameState.get_max_capacity(), GameState.get_pot()["name"], GameState.MATERIAL_SELL_PRICE
 	]
-	shop_weapon_info.text = "Weapon: %s" % GameState.get_weapon()["name"]
+	shop_weapon_info.text = "Weapon: %s | Pot: %s" % [GameState.get_weapon()["name"], GameState.get_pot()["name"]]
 	sell_button.disabled = GameState.materials <= 0
 	if GameState.has_next_weapon():
 		var nxt := GameState.next_weapon()
@@ -98,17 +112,35 @@ func _refresh_shop() -> void:
 		buy_button.text = "Max Weapon Owned"
 		buy_button.disabled = true
 
+	if is_instance_valid(upgrade_pot_button):
+		upgrade_pot_button.visible = not GameState.pot_growth_paused
+		if not GameState.pot_growth_paused:
+			if GameState.has_next_pot():
+				var nxt_pot := GameState.next_pot()
+				upgrade_pot_button.text = "Upgrade Pot: %s (%d G)" % [nxt_pot["name"], nxt_pot["price"]]
+				upgrade_pot_button.disabled = GameState.gold < int(nxt_pot["price"])
+			else:
+				upgrade_pot_button.text = "Max Pot Level Reached"
+				upgrade_pot_button.disabled = true
+
 	var next_recipe := GameState.get_next_recipe()
 	var recipe_data := GameState.get_recipe(next_recipe)
+	var req_pot_lvl: int = int(recipe_data.get("required_pot_level", 1))
 	var required_materials: int = int(recipe_data.get("required_materials", 0))
+	var current_pot_lvl: int = int(GameState.get_pot().get("level", 1))
+
 	if _cook_active:
 		cook_button.text = "Finish Cooking"
 		cook_button.disabled = false
 		_set_recipe_status("Cooking %s - %.1fs" % [_cook_recipe_name, _cook_time_left], Color(1.0, 0.8, 0.2))
 	else:
 		cook_button.text = "Cook %s (%d mats)" % [next_recipe, required_materials]
-		cook_button.disabled = not GameState.can_craft_recipe(next_recipe)
-		_set_recipe_status("Ramen Cooked: %d\nUnlocked: %d" % [GameState.ramen_completed, GameState.get_available_recipes().size()], Color(0.25, 1.0, 0.45))
+		if not GameState.pot_growth_paused and current_pot_lvl < req_pot_lvl:
+			cook_button.disabled = true
+			_set_recipe_status("Needs %s (Pot Lv%d)\nRamen Cooked: %d" % [recipe_data.get("description", next_recipe), req_pot_lvl, GameState.ramen_completed], Color(1.0, 0.45, 0.45))
+		else:
+			cook_button.disabled = not GameState.can_craft_recipe(next_recipe)
+			_set_recipe_status("Next: %s\nRamen Cooked: %d | Unlocked: %d" % [next_recipe, GameState.ramen_completed, GameState.get_available_recipes().size()], Color(0.25, 1.0, 0.45))
 
 func _set_recipe_status(text: String, color: Color) -> void:
 	recipe_info.text = text
@@ -127,11 +159,19 @@ func close_shop() -> void:
 	shop_panel.visible = false
 
 func _on_sell() -> void:
-	GameState.sell_all_materials()
+	var earned := GameState.sell_all_materials()
+	if earned > 0 and SoundManager:
+		SoundManager.play_sell()
 	_refresh_shop()
 
 func _on_buy() -> void:
-	GameState.try_buy_next_weapon()
+	if GameState.try_buy_next_weapon() and SoundManager:
+		SoundManager.play_buy()
+	_refresh_shop()
+
+func _on_upgrade_pot() -> void:
+	if GameState.try_upgrade_pot() and SoundManager:
+		SoundManager.play_buy()
 	_refresh_shop()
 
 func _on_cook() -> void:
@@ -140,12 +180,16 @@ func _on_cook() -> void:
 		return
 	var recipe := GameState.get_next_recipe()
 	if not GameState.can_craft_recipe(recipe):
-		recipe_info.text = "Not enough materials to cook %s." % recipe
+		recipe_info.text = "Cannot cook %s (Check pot level or materials)." % recipe
 		return
 	_cook_active = true
 	_cook_recipe_name = recipe
+	if SoundManager:
+		SoundManager.play_cook_start()
 	var recipe_data := GameState.get_recipe(recipe)
-	_cook_total_time = float(recipe_data.get("cook_time", 6.0))
+	var base_time: float = float(recipe_data.get("cook_time", 6.0))
+	var pot_speed: float = float(GameState.get_pot().get("cook_speed", 1.0))
+	_cook_total_time = base_time / pot_speed
 	_cook_time_left = _cook_total_time
 	_set_recipe_status("Cooking %s - %.1fs" % [recipe, _cook_time_left], Color(1.0, 0.8, 0.2))
 	_refresh_shop()
@@ -156,9 +200,38 @@ func _finish_cooking(success: bool) -> void:
 	_cook_active = false
 	if success:
 		if GameState.craft_recipe(_cook_recipe_name):
+			if SoundManager:
+				SoundManager.play_cook_success()
 			_set_recipe_status("Success! %s cooked." % _cook_recipe_name, Color(0.3, 1.0, 0.55))
 		else:
-			_set_recipe_status("Not enough materials to cook %s." % _cook_recipe_name, Color(1.0, 0.35, 0.35))
+			_set_recipe_status("Cooking failed for %s." % _cook_recipe_name, Color(1.0, 0.35, 0.35))
 	else:
 		_set_recipe_status("Cooking failed! The pot boiled over.", Color(1.0, 0.35, 0.35))
 	_refresh_shop()
+
+func toggle_recipe_book() -> void:
+	if not is_instance_valid(recipe_book_panel):
+		return
+	recipe_book_panel.visible = not recipe_book_panel.visible
+	if recipe_book_panel.visible:
+		_refresh_recipe_book()
+
+func close_recipe_book() -> void:
+	if is_instance_valid(recipe_book_panel):
+		recipe_book_panel.visible = false
+
+func _refresh_recipe_book() -> void:
+	if not is_instance_valid(recipe_book_content):
+		return
+	var text: String = "[b]Recipe List:[/b]\n\n"
+	for recipe_name in GameState.RECIPES.keys():
+		var data: Dictionary = GameState.RECIPES[recipe_name]
+		var unlocked := GameState.has_recipe(recipe_name)
+		var status_str := "[color=#40ff70]UNLOCKED[/color]" if unlocked else "[color=#ff5050]LOCKED[/color]"
+		var desc: String = String(data.get("description", recipe_name))
+		var req_mats: int = int(data.get("required_materials", 0))
+		var cook_t: float = float(data.get("cook_time", 6.0))
+		text += "• [b]%s[/b] (%s)\n  - Ingredients: %d Materials\n  - Cook Time: %.1fs\n  - Status: %s\n\n" % [
+			recipe_name, desc, req_mats, cook_t, status_str
+		]
+	recipe_book_content.text = text

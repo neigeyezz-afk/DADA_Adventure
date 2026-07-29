@@ -2,6 +2,8 @@ extends Area2D
 class_name Pickup
 ## 몬스터 사망/숨겨진 요소에서 튀어나오는 획득물. 플레이어와 닿으면 자동 획득.
 
+const FloatingText = preload("res://scripts/floating_text.gd")
+
 var kind: String = "material"
 var amount: int = 1
 var material_name: String = "water"
@@ -44,9 +46,24 @@ func _on_body_entered(body: Node2D) -> void:
 	if _collected:
 		return
 	if body is PlayerDADA:
-		_collected = true
 		if kind == "gold":
+			_collected = true
 			GameState.add_gold(amount)
+			if SoundManager:
+				SoundManager.play_pickup()
+			FloatingText.spawn(get_parent(), global_position, "+%d G" % amount, Color(1.0, 0.85, 0.2))
+			queue_free()
 		else:
-			GameState.add_material(material_name, amount)
-		queue_free()
+			if GameState.can_add_material(material_name, amount):
+				_collected = true
+				GameState.add_material(material_name, amount)
+				if SoundManager:
+					SoundManager.play_pickup()
+				FloatingText.spawn(get_parent(), global_position, "+%d Mat" % amount, Color(0.3, 0.95, 0.45))
+				queue_free()
+			else:
+				# Pot inventory full effect: slight jump up
+				var tw := create_tween()
+				tw.tween_property(self, "position:y", position.y - 8.0, 0.1)
+				tw.tween_property(self, "position:y", position.y, 0.1)
+

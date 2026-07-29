@@ -9,6 +9,7 @@ extends Node
 signal gold_changed(amount: int)
 signal materials_changed(total: int)
 signal weapon_changed(index: int)
+signal pot_changed(level: int, pot_info: Dictionary)
 signal wealth_changed(level: int, exp_value: int)
 signal ramen_crafted(count: int)
 
@@ -19,15 +20,26 @@ var gold: int = 0
 var materials: int = 3
 var ingredient_inventory: Dictionary = {}
 
+# --- 냄비 성장 시스템 (기획서 12. 냄비 성장 시스템) ---
+const POTS: Array[Dictionary] = [
+	{"level": 1, "name": "양은냄비 (Brass Pot)", "capacity": 10, "cook_speed": 1.0, "price": 0},
+	{"level": 3, "name": "코팅냄비 (Coated Pot)", "capacity": 15, "cook_speed": 1.15, "price": 50},
+	{"level": 4, "name": "법랑냄비 (Enamel Pot)", "capacity": 20, "cook_speed": 1.3, "price": 100},
+	{"level": 5, "name": "스탠냄비 (Stainless Pot)", "capacity": 25, "cook_speed": 1.45, "price": 180},
+	{"level": 6, "name": "강화유리냄비 (Glass Pot)", "capacity": 30, "cook_speed": 1.6, "price": 280},
+	{"level": 10, "name": "무쇠냄비 (Cast Iron Pot)", "capacity": 40, "cook_speed": 2.0, "price": 450},
+]
+var pot_index: int = 0
+
 # --- 라면 시스템 ---
 var ramen_completed: int = 0
 var unlocked_recipes: Array[String] = ["Basic Ramen"]
 const RECIPES: Dictionary = {
-	"Basic Ramen": {"required_materials": 3, "cook_time": 6.0, "description": "Starter bowl"},
-	"Cheese Ramen": {"required_materials": 5, "cook_time": 8.0, "description": "Cheesy upgrade"},
-	"Kimchi Ramen": {"required_materials": 6, "cook_time": 9.0, "description": "Spicy twist"},
-	"Seafood Ramen": {"required_materials": 7, "cook_time": 10.0, "description": "Seafood feast"},
-	"Beef Ramen": {"required_materials": 8, "cook_time": 11.0, "description": "Rich and hearty"},
+	"Basic Ramen": {"required_pot_level": 1, "required_materials": 3, "cook_time": 6.0, "description": "순정라면 (Req: Pot Lv1)"},
+	"Cheese Ramen": {"required_pot_level": 3, "required_materials": 5, "cook_time": 8.0, "description": "치즈라면 (Req: Pot Lv3)"},
+	"Kimchi Ramen": {"required_pot_level": 4, "required_materials": 6, "cook_time": 9.0, "description": "김치라면 (Req: Pot Lv4)"},
+	"Seafood Ramen": {"required_pot_level": 5, "required_materials": 7, "cook_time": 10.0, "description": "해물라면 (Req: Pot Lv5)"},
+	"Beef Ramen": {"required_pot_level": 6, "required_materials": 8, "cook_time": 11.0, "description": "고기라면 (Req: Pot Lv6)"},
 }
 
 # --- 상점(푸르지아) 재산(Wealth) 경험치: 기획서 2.3 단계별 성장 ---
@@ -49,6 +61,39 @@ const MATERIAL_WEALTH_EXP: int = 10   # 소재 1개 판매 시 상점이 얻는 
 
 func _ready() -> void:
 	load_state()
+
+func get_pot() -> Dictionary:
+	return POTS[pot_index]
+
+func get_max_capacity() -> int:
+	return int(get_pot().get("capacity", 10))
+
+func can_add_material(_material_name: String = "", amount: int = 1) -> bool:
+	if pot_growth_paused:
+		return true
+	return (materials + amount) <= get_max_capacity()
+
+func has_next_pot() -> bool:
+	return pot_index + 1 < POTS.size()
+
+func next_pot() -> Dictionary:
+	if has_next_pot():
+		return POTS[pot_index + 1]
+	return {}
+
+func try_upgrade_pot() -> bool:
+	if not has_next_pot():
+		return false
+	var nxt := next_pot()
+	var price: int = int(nxt.get("price", 0))
+	if gold < price:
+		return false
+	gold -= price
+	pot_index += 1
+	gold_changed.emit(gold)
+	pot_changed.emit(int(POTS[pot_index]["level"]), POTS[pot_index])
+	save_state()
+	return true
 
 func get_weapon() -> Dictionary:
 	return WEAPONS[weapon_index]
@@ -75,12 +120,20 @@ func get_next_recipe() -> String:
 			return recipe_name
 	return "Basic Ramen"
 
+# 냄비 성장 시스템 일시 중지 플래그 (중지 요청에 따라 true로 설정)
+var pot_growth_paused: bool = true
+
 func can_craft_recipe(recipe_name: String) -> bool:
 	if not has_recipe(recipe_name):
 		return false
 	var recipe := get_recipe(recipe_name)
 	if recipe.is_empty():
 		return false
+	if not pot_growth_paused:
+		var req_pot_lvl: int = int(recipe.get("required_pot_level", 1))
+		var current_pot_lvl: int = int(get_pot().get("level", 1))
+		if current_pot_lvl < req_pot_lvl:
+			return false
 	return materials >= int(recipe.get("required_materials", 0))
 
 func craft_recipe(recipe_name: String) -> bool:
@@ -118,6 +171,7 @@ func save_state() -> void:
 		"materials": materials,
 		"ingredient_inventory": ingredient_inventory,
 		"weapon_index": weapon_index,
+		"pot_index": pot_index,
 		"wealth_level": wealth_level,
 		"wealth_exp": wealth_exp,
 		"ramen_completed": ramen_completed,
@@ -139,6 +193,7 @@ func load_state() -> void:
 		materials = int(parsed.get("materials", materials))
 		ingredient_inventory = parsed.get("ingredient_inventory", ingredient_inventory)
 		weapon_index = int(parsed.get("weapon_index", weapon_index))
+		pot_index = int(parsed.get("pot_index", pot_index))
 		wealth_level = int(parsed.get("wealth_level", wealth_level))
 		wealth_exp = int(parsed.get("wealth_exp", wealth_exp))
 		ramen_completed = int(parsed.get("ramen_completed", ramen_completed))
@@ -157,6 +212,7 @@ func load_state() -> void:
 		gold_changed.emit(gold)
 		materials_changed.emit(materials)
 		weapon_changed.emit(weapon_index)
+		pot_changed.emit(int(POTS[pot_index]["level"]), POTS[pot_index])
 		wealth_changed.emit(wealth_level, wealth_exp)
 		ramen_crafted.emit(ramen_completed)
 
@@ -193,7 +249,9 @@ func add_gold(amount: int) -> void:
 	gold_changed.emit(gold)
 	save_state()
 
-func add_material(material_name: String, amount: int = 1) -> void:
+func add_material(material_name: String, amount: int = 1) -> bool:
+	if not can_add_material(material_name, amount):
+		return false
 	materials += amount
 	if ingredient_inventory.has(material_name):
 		ingredient_inventory[material_name] += amount
@@ -201,9 +259,10 @@ func add_material(material_name: String, amount: int = 1) -> void:
 		ingredient_inventory[material_name] = amount
 	materials_changed.emit(materials)
 	save_state()
+	return true
 
-func add_materials(amount: int) -> void:
-	add_material("water", amount)
+func add_materials(amount: int) -> bool:
+	return add_material("water", amount)
 
 func get_material_count(material_name: String) -> int:
 	return int(ingredient_inventory.get(material_name, 0))

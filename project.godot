@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="DADA_Adventure"
-run/main_scene="uid://bs1k6bha3wg5h"
+run/main_scene="res://scenes/title_screen.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 GameState="*res://autoload/game_state.gd"
+SoundManager="*res://autoload/sound_manager.gd"
 
 [display]
 

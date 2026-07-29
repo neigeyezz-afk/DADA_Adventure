@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name EnemySlime
 
+const FloatingText = preload("res://scripts/floating_text.gd")
+
 @export var speed: float = 56.0
 @export var chase_speed: float = 98.0
 @export var max_health: int = 3
@@ -75,16 +77,16 @@ func _get_slime_texture(lvl: int) -> Texture2D:
 		path = "res://assets/sprites/slime_lv3_blue.png"
 	elif lvl >= 4:
 		path = "res://assets/sprites/slime_lv4_ivory.png"
-	if ResourceLoader.exists(path):
-		var res = load(path)
-		if res is Texture2D:
-			return res
 	if FileAccess.file_exists(path):
 		var global_p := ProjectSettings.globalize_path(path)
 		if global_p != "":
 			var img := Image.load_from_file(global_p)
 			if img and not img.is_empty():
 				return ImageTexture.create_from_image(img)
+	if ResourceLoader.exists(path):
+		var res = load(path)
+		if res is Texture2D:
+			return res
 	return null
 
 func _apply_level() -> void:
@@ -98,16 +100,9 @@ func _apply_level() -> void:
 		_reward_multiplier = LEVEL3_REWARD_MULTIPLIER
 	
 	if is_instance_valid(sprite):
-		var tex := _get_slime_texture(level)
-		if tex:
-			sprite.texture = tex
-			sprite.visible = true
-			if is_instance_valid(body_rect):
-				body_rect.visible = false
-		elif is_instance_valid(body_rect):
-			body_rect.visible = true
-			body_rect.color = _base_color
-	elif is_instance_valid(body_rect):
+		sprite.visible = false
+	if is_instance_valid(body_rect):
+		body_rect.visible = true
 		body_rect.color = _base_color
 
 func _physics_process(delta: float) -> void:
@@ -197,6 +192,9 @@ func _on_hit_received(damage: int, dir: Vector2) -> void:
 	health -= damage
 	velocity.x = signf(dir.x) * 160.0
 	velocity.y = -120.0
+	if SoundManager:
+		SoundManager.play_hit()
+	FloatingText.spawn(get_parent(), global_position, "-%d" % damage, Color(1, 0.9, 0.3))
 	_flash()
 	if health <= 0:
 		_die()
