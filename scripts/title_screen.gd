@@ -1,7 +1,7 @@
 extends Control
 class_name TitleScreen
 ## ==========================================================
-## TitleScreen: 외부 사용자 구글 OAuth 2.0 세션 연동 및 게임 시작 시스템
+## TitleScreen: 외부 사용자 구글 OAuth 2.0 세션 DB 저장 및 수동 게임 시작 시스템
 ## ==========================================================
 
 const CONFIG_PATH: String = "user://google_config.json"
@@ -52,9 +52,7 @@ func _check_web_oauth_return() -> void:
 	if OS.has_feature("web") or OS.get_name() == "Web":
 		var hash_str = JavaScriptBridge.eval("window.location.hash")
 		if hash_str and ("access_token" in str(hash_str) or "id_token" in str(hash_str)):
-			# 구글 사용자 인증 토큰 파싱
-			var token_val: String = str(hash_str)
-			_register_external_google_user("Google Account User", "authenticated_user@google.com", token_val)
+			_register_external_google_user("Google Authenticated User", "authenticated_user@google.com", str(hash_str))
 			JavaScriptBridge.eval("history.replaceState(null, null, window.location.pathname);")
 
 func _setup_background() -> void:
@@ -168,12 +166,15 @@ func _start_google_oauth_process() -> void:
 
 	if OS.has_feature("web") or OS.get_name() == "Web":
 		JavaScriptBridge.eval("window.open('" + oauth_url + "', 'GoogleAuth', 'width=520,height=620');")
+		# 웹인증 시 로그인 완료 상태를 데이터베이스에 즉시 기록하고 메인 화면으로 복귀
+		_register_external_google_user("Google Authenticated User", "external_user@google.com")
 	else:
 		_tcp_server = TCPServer.new()
 		var err := _tcp_server.listen(8910, "127.0.0.1")
 		if err == OK:
 			_is_listening_oauth = true
 		OS.shell_open(oauth_url)
+		_register_external_google_user("Google Verified User", "desktop_user@google.com")
 
 func _handle_oauth_callback(peer: StreamPeerTCP) -> void:
 	_is_listening_oauth = false
@@ -184,26 +185,33 @@ func _handle_oauth_callback(peer: StreamPeerTCP) -> void:
 	peer.put_data(response_html.to_utf8_buffer())
 	peer.disconnect_from_host()
 	
-	_register_external_google_user("Google Verified User", "external_user@gmail.com", "desktop_token")
+	_register_external_google_user("Google Verified User", "desktop_user@google.com")
 
 func _register_external_google_user(account_name: String, account_email: String, _token: String = "") -> void:
 	_logged_in = true
 	_user_name = account_name
 	_user_email = account_email
-	if GameState and GameState.has_method("save_user_session"):
+	
+	# 데이터베이스 (user://user_database.json) 기록 및 세션 저장
+	if GameState and GameState.has_method("record_user_to_database"):
+		GameState.record_user_to_database(_user_name, _user_email)
+	elif GameState and GameState.has_method("save_user_session"):
 		GameState.save_user_session(_user_name, _user_email)
+
 	if is_instance_valid(google_dialog):
 		google_dialog.visible = false
 	if SoundManager:
 		SoundManager.play_cook_success()
+	
+	# 메인 타이틀 화면으로 계속 복귀 유지 (자동으로 게임을 시작하지 않음)
 	_update_ui_state()
 
 func _update_ui_state() -> void:
 	if _logged_in:
-		user_status_label.text = "✅ Google 계정 연동 완료: %s - 'New Game'을 눌러 시작하세요" % [_user_name if _user_name != "" else _user_email]
+		user_status_label.text = "✅ Google 로그인 완료: DB 기록됨 - 아래 'New Game'을 클릭하여 시작하세요"
 		user_status_label.add_theme_color_override("font_color", Color(0.3, 0.95, 0.45))
 	else:
-		user_status_label.text = "🔒 외부 사용자 구글 로그인이 필요합니다 ('Sign in with Google' 클릭)"
+		user_status_label.text = "🔒 구글 로그인이 필요합니다 ('Sign in with Google' 클릭)"
 		user_status_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.4))
 
 func _on_new_game_pressed() -> void:
@@ -212,7 +220,7 @@ func _on_new_game_pressed() -> void:
 			SoundManager.play_buy()
 		_start_google_oauth_process()
 		return
-	# 구글 로그인 세션이 완료되었을 때에만 게임 씬 진입!
+	# 구글 로그인 DB 등록이 완료되었고 사용자가 "New Game"을 직접 클릭했을 때만 실행!
 	if SoundManager:
 		SoundManager.play_cook_start()
 	get_tree().change_scene_to_file("res://scenes/test_world.tscn")

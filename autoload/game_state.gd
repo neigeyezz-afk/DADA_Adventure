@@ -327,3 +327,52 @@ func clear_user_session() -> void:
 	user_email = ""
 	if FileAccess.file_exists(SESSION_SAVE_PATH):
 		DirAccess.remove_absolute(SESSION_SAVE_PATH)
+
+const DB_SAVE_PATH: String = "user://user_database.json"
+
+func record_user_to_database(p_name: String, p_email: String) -> void:
+	save_user_session(p_name, p_email)
+	var db_data := {"users": {}, "history": []}
+	if FileAccess.file_exists(DB_SAVE_PATH):
+		var file := FileAccess.open(DB_SAVE_PATH, FileAccess.READ)
+		if file:
+			var txt := file.get_as_text()
+			file.close()
+			var json = JSON.parse_string(txt)
+			if json is Dictionary:
+				db_data = json
+
+	var users: Dictionary = db_data.get("users", {})
+	var history: Array = db_data.get("history", [])
+
+	var now_str := Time.get_datetime_string_from_system()
+	if users.has(p_email):
+		var user_rec: Dictionary = users[p_email]
+		user_rec["last_login"] = now_str
+		user_rec["login_count"] = int(user_rec.get("login_count", 1)) + 1
+		user_rec["user_name"] = p_name
+		users[p_email] = user_rec
+	else:
+		users[p_email] = {
+			"user_name": p_name,
+			"user_email": p_email,
+			"first_login": now_str,
+			"last_login": now_str,
+			"login_count": 1,
+			"provider": "google_oauth2"
+		}
+
+	history.append({
+		"email": p_email,
+		"name": p_name,
+		"timestamp": now_str,
+		"action": "LOGIN"
+	})
+
+	db_data["users"] = users
+	db_data["history"] = history
+
+	var out_file := FileAccess.open(DB_SAVE_PATH, FileAccess.WRITE)
+	if out_file:
+		out_file.store_string(JSON.stringify(db_data, "  "))
+		out_file.close()
