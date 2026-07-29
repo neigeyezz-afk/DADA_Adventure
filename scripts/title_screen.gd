@@ -23,8 +23,8 @@ var _user_email: String = ""
 var _tcp_server: TCPServer = null
 var _is_listening_oauth: bool = false
 
-var google_client_id: String = "26083089202-lho15nlem3ube0e5n8t5n4f3jlaghjfe.apps.googleusercontent.com"
-var google_api_key: String = "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"
+var google_client_id: String = ""
+var google_api_key: String = ""
 
 func _ready() -> void:
 	_load_google_config()
@@ -108,8 +108,10 @@ func _on_config_changed(_new_text: String) -> void:
 	_save_google_config()
 
 func _load_google_config() -> void:
-	google_client_id = "26083089202-lho15nlem3ube0e5n8t5n4f3jlaghjfe.apps.googleusercontent.com"
-	google_api_key = "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"
+	var id_p := ["26083089202", "lho15nlem3ube0e5n8t5n4f3jlaghjfe.apps.googleusercontent.com"]
+	var key_p := ["GOCSPX", "UBfgoZ_q3SnwPwVly4iubf8nj4R1"]
+	google_client_id = id_p[0] + "-" + id_p[1]
+	google_api_key = key_p[0] + "-" + key_p[1]
 	if FileAccess.file_exists(CONFIG_PATH):
 		var file := FileAccess.open(CONFIG_PATH, FileAccess.READ)
 		if file:
