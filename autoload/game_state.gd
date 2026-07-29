@@ -20,6 +20,13 @@ var gold: int = 0
 var materials: int = 3
 var ingredient_inventory: Dictionary = {}
 
+# --- 구글 사용자 인증 세션 ---
+var is_user_logged_in: bool = false
+var user_name: String = ""
+var user_email: String = ""
+
+const SESSION_SAVE_PATH: String = "user://user_session.json"
+
 # --- 냄비 성장 시스템 (기획서 12. 냄비 성장 시스템) ---
 const POTS: Array[Dictionary] = [
 	{"level": 1, "name": "양은냄비 (Brass Pot)", "capacity": 10, "cook_speed": 1.0, "price": 0},
@@ -280,3 +287,43 @@ func _unique_strings(values: Array[String]) -> Array[String]:
 		if value not in unique:
 			unique.append(value)
 	return unique
+
+func save_user_session(p_name: String, p_email: String) -> void:
+	is_user_logged_in = true
+	user_name = p_name
+	user_email = p_email
+	var data := {
+		"is_logged_in": true,
+		"user_name": user_name,
+		"user_email": user_email,
+		"login_time": Time.get_datetime_string_from_system()
+	}
+	var file := FileAccess.open(SESSION_SAVE_PATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(data))
+		file.close()
+
+func load_user_session() -> bool:
+	if FileAccess.file_exists(SESSION_SAVE_PATH):
+		var file := FileAccess.open(SESSION_SAVE_PATH, FileAccess.READ)
+		if file:
+			var txt := file.get_as_text()
+			file.close()
+			var json = JSON.parse_string(txt)
+			if json is Dictionary:
+				is_user_logged_in = json.get("is_logged_in", false)
+				user_name = json.get("user_name", "")
+				user_email = json.get("user_email", "")
+				if is_user_logged_in and user_email != "":
+					return true
+	is_user_logged_in = false
+	user_name = ""
+	user_email = ""
+	return false
+
+func clear_user_session() -> void:
+	is_user_logged_in = false
+	user_name = ""
+	user_email = ""
+	if FileAccess.file_exists(SESSION_SAVE_PATH):
+		DirAccess.remove_absolute(SESSION_SAVE_PATH)

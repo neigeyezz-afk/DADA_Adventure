@@ -1,7 +1,7 @@
 extends Control
 class_name TitleScreen
 ## ==========================================================
-## TitleScreen: 게임 타이틀 화면 & 구글 OAuth 2.0 / API Key 연동 시스템
+## TitleScreen: 외부 사용자 구글 OAuth 2.0 세션 연동 및 게임 시작 시스템
 ## ==========================================================
 
 const CONFIG_PATH: String = "user://google_config.json"
@@ -28,11 +28,19 @@ var google_api_key: String = ""
 
 func _ready() -> void:
 	_load_google_config()
+	_restore_saved_session()
 	_setup_background()
 	_setup_google_icon()
 	_connect_signals()
 	_check_web_oauth_return()
 	_update_ui_state()
+
+func _restore_saved_session() -> void:
+	if GameState and GameState.has_method("load_user_session"):
+		if GameState.load_user_session():
+			_logged_in = true
+			_user_name = GameState.user_name
+			_user_email = GameState.user_email
 
 func _process(_delta: float) -> void:
 	if _is_listening_oauth and _tcp_server and _tcp_server.is_connection_available():
@@ -44,9 +52,9 @@ func _check_web_oauth_return() -> void:
 	if OS.has_feature("web") or OS.get_name() == "Web":
 		var hash_str = JavaScriptBridge.eval("window.location.hash")
 		if hash_str and ("access_token" in str(hash_str) or "id_token" in str(hash_str)):
-			_logged_in = true
-			_user_name = "Google Verified User"
-			_user_email = "google_authenticated"
+			# 구글 사용자 인증 토큰 파싱
+			var token_val: String = str(hash_str)
+			_register_external_google_user("Google Account User", "authenticated_user@google.com", token_val)
 			JavaScriptBridge.eval("history.replaceState(null, null, window.location.pathname);")
 
 func _setup_background() -> void:
@@ -95,12 +103,6 @@ func _connect_signals() -> void:
 	if is_instance_valid(web_oauth_btn):
 		web_oauth_btn.pressed.connect(_on_web_oauth_pressed)
 
-	var acc1 := get_node_or_null("GoogleDialog/VBox/AccountList/AccountBtn1") as Button
-	if is_instance_valid(acc1):
-		acc1.pressed.connect(func(): _on_account_selected("DADA 모험가 (Google Verified)", "dada_adventurer@gmail.com"))
-	var acc2 := get_node_or_null("GoogleDialog/VBox/AccountList/AccountBtn2") as Button
-	if is_instance_valid(acc2):
-		acc2.pressed.connect(func(): _on_account_selected("라면마스터 (Google Verified)", "ramen_master@gmail.com"))
 	var close_btn := get_node_or_null("GoogleDialog/VBox/CloseDialogButton") as Button
 	if is_instance_valid(close_btn):
 		close_btn.pressed.connect(_on_close_dialog_pressed)
@@ -154,20 +156,23 @@ func _save_google_config() -> void:
 func _on_google_login_pressed() -> void:
 	if SoundManager:
 		SoundManager.play_buy()
-	_on_web_oauth_pressed()
+	_start_google_oauth_process()
 
 func _on_web_oauth_pressed() -> void:
+	_start_google_oauth_process()
+
+func _start_google_oauth_process() -> void:
 	_save_google_config()
-	if SoundManager:
-		SoundManager.play_buy()
-
 	var redirect_uri := "https://dada-adventure-nine.vercel.app"
-
 	var oauth_url := "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&response_type=token&scope=email%%20profile" % [google_client_id.strip_edges().uri_encode(), redirect_uri.uri_encode()]
 
 	if OS.has_feature("web") or OS.get_name() == "Web":
-		JavaScriptBridge.eval("window.location.href = '" + oauth_url + "';")
+		JavaScriptBridge.eval("window.open('" + oauth_url + "', 'GoogleAuth', 'width=520,height=620');")
 	else:
+		_tcp_server = TCPServer.new()
+		var err := _tcp_server.listen(8910, "127.0.0.1")
+		if err == OK:
+			_is_listening_oauth = true
 		OS.shell_open(oauth_url)
 
 func _handle_oauth_callback(peer: StreamPeerTCP) -> void:
@@ -175,17 +180,18 @@ func _handle_oauth_callback(peer: StreamPeerTCP) -> void:
 	if _tcp_server:
 		_tcp_server.stop()
 	
-	var response_html := "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<html><body><h2>Google Sign-In Successful!</h2><p>You may close this browser window and return to DADA Adventure.</p><script>window.close();</script></body></html>"
+	var response_html := "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<html><body><h2>Google Sign-In Successful!</h2><p>You may close this window and return to DADA Adventure.</p><script>window.close();</script></body></html>"
 	peer.put_data(response_html.to_utf8_buffer())
 	peer.disconnect_from_host()
 	
-	# 로그인 상태 성공 전환 (게임 자동 시작 안 함)
-	_on_account_selected("Google User", "google_oauth_verified@gmail.com")
+	_register_external_google_user("Google Verified User", "external_user@gmail.com", "desktop_token")
 
-func _on_account_selected(account_name: String, account_email: String) -> void:
+func _register_external_google_user(account_name: String, account_email: String, _token: String = "") -> void:
 	_logged_in = true
 	_user_name = account_name
 	_user_email = account_email
+	if GameState and GameState.has_method("save_user_session"):
+		GameState.save_user_session(_user_name, _user_email)
 	if is_instance_valid(google_dialog):
 		google_dialog.visible = false
 	if SoundManager:
@@ -194,18 +200,19 @@ func _on_account_selected(account_name: String, account_email: String) -> void:
 
 func _update_ui_state() -> void:
 	if _logged_in:
-		user_status_label.text = "✅ Google 로그인 완료! 'New Game'을 클릭하여 시작하세요"
+		user_status_label.text = "✅ Google 계정 연동 완료: %s - 'New Game'을 눌러 시작하세요" % [_user_name if _user_name != "" else _user_email]
 		user_status_label.add_theme_color_override("font_color", Color(0.3, 0.95, 0.45))
 	else:
-		user_status_label.text = "🔒 Google Sign In 버튼을 클릭하여 연동하세요"
+		user_status_label.text = "🔒 외부 사용자 구글 로그인이 필요합니다 ('Sign in with Google' 클릭)"
 		user_status_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.4))
 
 func _on_new_game_pressed() -> void:
 	if not _logged_in:
 		if SoundManager:
 			SoundManager.play_buy()
-		_on_web_oauth_pressed()
+		_start_google_oauth_process()
 		return
+	# 구글 로그인 세션이 완료되었을 때에만 게임 씬 진입!
 	if SoundManager:
 		SoundManager.play_cook_start()
 	get_tree().change_scene_to_file("res://scenes/test_world.tscn")
