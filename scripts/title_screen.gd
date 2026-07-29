@@ -31,6 +31,7 @@ func _ready() -> void:
 	_setup_background()
 	_setup_google_icon()
 	_connect_signals()
+	_check_web_oauth_return()
 	_update_ui_state()
 
 func _process(_delta: float) -> void:
@@ -38,6 +39,15 @@ func _process(_delta: float) -> void:
 		var peer: StreamPeerTCP = _tcp_server.take_connection()
 		if peer:
 			_handle_oauth_callback(peer)
+
+func _check_web_oauth_return() -> void:
+	if OS.has_feature("web") or OS.get_name() == "Web":
+		var hash_str = JavaScriptBridge.eval("window.location.hash")
+		if hash_str and ("access_token" in str(hash_str) or "id_token" in str(hash_str)):
+			_logged_in = true
+			_user_name = "Google Verified User"
+			_user_email = "google_authenticated"
+			JavaScriptBridge.eval("history.replaceState(null, null, window.location.pathname);")
 
 func _setup_background() -> void:
 	var bg_tex := _load_title_background()
@@ -144,20 +154,21 @@ func _save_google_config() -> void:
 func _on_google_login_pressed() -> void:
 	if SoundManager:
 		SoundManager.play_buy()
-	if is_instance_valid(google_dialog):
-		google_dialog.visible = true
+	_on_web_oauth_pressed()
 
 func _on_web_oauth_pressed() -> void:
 	_save_google_config()
 	if SoundManager:
 		SoundManager.play_buy()
 
-	# Vercel 배포 도메인을 기본 구글 OAuth 리다이렉트 주소로 전면 적용
 	var redirect_uri := "https://dada-adventure-nine.vercel.app"
 
 	var oauth_url := "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&response_type=token&scope=email%%20profile" % [google_client_id.strip_edges().uri_encode(), redirect_uri.uri_encode()]
 
-	OS.shell_open(oauth_url)
+	if OS.has_feature("web") or OS.get_name() == "Web":
+		JavaScriptBridge.eval("window.location.href = '" + oauth_url + "';")
+	else:
+		OS.shell_open(oauth_url)
 
 func _handle_oauth_callback(peer: StreamPeerTCP) -> void:
 	_is_listening_oauth = false
@@ -168,7 +179,7 @@ func _handle_oauth_callback(peer: StreamPeerTCP) -> void:
 	peer.put_data(response_html.to_utf8_buffer())
 	peer.disconnect_from_host()
 	
-	# 로그인 상태 성공 전환
+	# 로그인 상태 성공 전환 (게임 자동 시작 안 함)
 	_on_account_selected("Google User", "google_oauth_verified@gmail.com")
 
 func _on_account_selected(account_name: String, account_email: String) -> void:
@@ -183,7 +194,7 @@ func _on_account_selected(account_name: String, account_email: String) -> void:
 
 func _update_ui_state() -> void:
 	if _logged_in:
-		user_status_label.text = "✅ Google Verified: %s (%s)" % [_user_name, _user_email]
+		user_status_label.text = "✅ Google 로그인 완료! 'New Game'을 클릭하여 시작하세요"
 		user_status_label.add_theme_color_override("font_color", Color(0.3, 0.95, 0.45))
 	else:
 		user_status_label.text = "🔒 Google Sign In 버튼을 클릭하여 연동하세요"
@@ -193,8 +204,7 @@ func _on_new_game_pressed() -> void:
 	if not _logged_in:
 		if SoundManager:
 			SoundManager.play_buy()
-		if is_instance_valid(google_dialog):
-			google_dialog.visible = true
+		_on_web_oauth_pressed()
 		return
 	if SoundManager:
 		SoundManager.play_cook_start()
