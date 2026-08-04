@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6villagegate123"]
+
+[ext_resource type="Script" path="res://scripts/village_entrance.gd" id="1_gate"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
+size = Vector2(80, 100)
+
+[node name="VillageEntrance" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_gate")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -40)
+shape = SubResource("RectangleShape2D_gate")
+
+[node name="ArchPillarLeft" type="ColorRect" parent="."]
+offset_left = -36.0
+offset_top = -90.0
+offset_right = -24.0
+color = Color(0.45, 0.35, 0.25, 1)
+
+[node name="ArchPillarRight" type="ColorRect" parent="."]
+offset_left = 24.0
+offset_top = -90.0
+offset_right = 36.0
+color = Color(0.45, 0.35, 0.25, 1)
+
+[node name="ArchRoof" type="ColorRect" parent="."]
+offset_left = -44.0
+offset_top = -105.0
+offset_right = 44.0
+offset_bottom = -90.0
+color = Color(0.82, 0.25, 0.2, 1)
+
+[node name="GatePortalDoor" type="ColorRect" parent="."]
+offset_left = -24.0
+offset_top = -90.0
+offset_right = 24.0
+color = Color(0.18, 0.58, 0.85, 0.85)
+
+[node name="GateSign" type="Label" parent="."]
+offset_left = -60.0
+offset_top = -135.0
+offset_right = 60.0
+offset_bottom = -105.0
+theme_override_font_sizes/font_size = 14
+text = "⛩️ 평화로운 라면 마을"
+horizontal_alignment = 1
+
+[node name="PromptLabel" type="Label" parent="."]
+visible = false
+offset_left = -60.0
+offset_top = -160.0
+offset_right = 60.0
+offset_bottom = -135.0
+theme_override_font_sizes/font_size = 13
+text = "[마을 입장: W/Up]"
+horizontal_alignment = 1

@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://c6slime123"]
 
-[ext_resource type="Script" path="res://scripts/slime.gd" id="1_slime"]
-[ext_resource type="Script" path="res://scripts/hurtbox.gd" id="2_hurt"]
+[ext_resource type="Script" uid="uid://dspy8jikyehf7" path="res://scripts/slime.gd" id="1_slime"]
+[ext_resource type="Script" uid="uid://c20bxkkpppjlx" path="res://scripts/hurtbox.gd" id="2_hurt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_slime"]
 size = Vector2(32, 32)
@@ -15,50 +15,102 @@ size = Vector2(34, 34)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_touch"]
 size = Vector2(36, 36)
 
-[node name="Slime" type="CharacterBody2D"]
+[node name="Slime" type="CharacterBody2D" unique_id=423631192]
 collision_layer = 4
-collision_mask = 1
 script = ExtResource("1_slime")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="VisualPivot" type="Node2D" parent="." unique_id=895863481]
+position = Vector2(0, 16)
+
+[node name="BodyOutline" type="ColorRect" parent="VisualPivot" unique_id=408214948]
+offset_left = -17.0
+offset_top = -33.0
+offset_right = 17.0
+offset_bottom = 1.0
+color = Color(0.08, 0.12, 0.18, 1)
+
+[node name="BodyRect" type="ColorRect" parent="VisualPivot" unique_id=271262263]
+offset_left = -15.0
+offset_top = -31.0
+offset_right = 15.0
+color = Color(0.25, 0.78, 0.88, 1)
+
+[node name="BottomRim" type="ColorRect" parent="VisualPivot/BodyRect" unique_id=1952813929]
+layout_mode = 0
+offset_top = 26.0
+offset_right = 30.0
+offset_bottom = 31.0
+color = Color(0.18, 0.58, 0.72, 1)
+
+[node name="ShineBlock" type="ColorRect" parent="VisualPivot/BodyRect" unique_id=30828396]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 4.0
+offset_right = 26.0
+offset_bottom = 12.0
+color = Color(1, 1, 1, 0.75)
+
+[node name="EyeLeft" type="ColorRect" parent="VisualPivot/BodyRect" unique_id=178918248]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 15.0
+offset_right = 10.0
+offset_bottom = 22.0
+color = Color(0.08, 0.1, 0.15, 1)
+
+[node name="EyeRight" type="ColorRect" parent="VisualPivot/BodyRect" unique_id=39478707]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 15.0
+offset_right = 23.0
+offset_bottom = 22.0
+color = Color(0.08, 0.1, 0.15, 1)
+
+[node name="BlushLeft" type="ColorRect" parent="VisualPivot/BodyRect" unique_id=869878968]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 21.0
+offset_right = 7.0
+offset_bottom = 24.0
+color = Color(0.95, 0.35, 0.45, 0.8)
+
+[node name="BlushRight" type="ColorRect" parent="VisualPivot/BodyRect" unique_id=1765106227]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 21.0
+offset_right = 27.0
+offset_bottom = 24.0
+color = Color(0.95, 0.35, 0.45, 0.8)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2078163200]
 visible = false
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
-color = Color(1, 1, 0, 1)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.035, 0.035)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=868177108]
 shape = SubResource("RectangleShape2D_slime")
 
-[node name="LedgeCheck" type="RayCast2D" parent="."]
+[node name="LedgeCheck" type="RayCast2D" parent="." unique_id=1552302546]
 position = Vector2(-16, 0)
 target_position = Vector2(0, 20)
-collision_mask = 1
 
-[node name="DetectionZone" type="Area2D" parent="."]
+[node name="DetectionZone" type="Area2D" parent="." unique_id=413948792]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionZone" unique_id=973594479]
 shape = SubResource("CircleShape2D_det")
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=212092693]
 collision_layer = 16
 collision_mask = 0
 monitoring = false
-monitorable = true
 script = ExtResource("2_hurt")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1402426052]
 shape = SubResource("RectangleShape2D_hurt")
 
-[node name="TouchDamage" type="Area2D" parent="."]
+[node name="TouchDamage" type="Area2D" parent="." unique_id=1510879601]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TouchDamage"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TouchDamage" unique_id=1510815540]
 shape = SubResource("RectangleShape2D_touch")

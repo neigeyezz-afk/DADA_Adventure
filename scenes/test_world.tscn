@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bs1k6bha3wg5h"]
 
 [ext_resource type="PackedScene" uid="uid://i58iihdhelcr" path="res://scenes/dada.tscn" id="1_dada"]
-[ext_resource type="PackedScene" path="res://scenes/slime.tscn" id="2_slime"]
+[ext_resource type="PackedScene" uid="uid://c6slime123" path="res://scenes/slime.tscn" id="2_slime"]
 [ext_resource type="PackedScene" path="res://scenes/secret_spot.tscn" id="3_secret"]
 [ext_resource type="PackedScene" path="res://scenes/hidden_door.tscn" id="4_door"]
 [ext_resource type="PackedScene" path="res://scenes/shop.tscn" id="5_shop"]
@@ -13,37 +13,79 @@
 [ext_resource type="PackedScene" path="res://scenes/coin_box.tscn" id="11_coinbox"]
 [ext_resource type="PackedScene" path="res://scenes/shop_entrance.tscn" id="12_entrance"]
 [ext_resource type="PackedScene" path="res://scenes/room_exit.tscn" id="13_exit"]
-[ext_resource type="PackedScene" path="res://scenes/golem.tscn" id="14_golem"]
-[ext_resource type="Texture2D" uid="uid://w0tu0pfqvs2d" path="res://assets/sprites/ground_tile_2.png" id="15_ground2"]
-[ext_resource type="PackedScene" path="res://scenes/mole.tscn" id="15_mole"]
-[ext_resource type="PackedScene" path="res://scenes/king_slime.tscn" id="17_king"]
+[ext_resource type="PackedScene" uid="uid://c6golem123" path="res://scenes/golem.tscn" id="14_golem"]
+[ext_resource type="PackedScene" uid="uid://c6mole123" path="res://scenes/mole.tscn" id="15_mole"]
+[ext_resource type="PackedScene" uid="uid://cxbvpel7ic54y" path="res://scenes/king_slime.tscn" id="17_king"]
+[ext_resource type="PackedScene" uid="uid://db7m08wrop3rq" path="res://scenes/parallax_background.tscn" id="18_parallax"]
+[ext_resource type="PackedScene" uid="uid://do2kanjltd35o" path="res://scenes/tutorial_sign.tscn" id="19_sign"]
+[ext_resource type="PackedScene" uid="uid://c6villagegate123" path="res://scenes/village_entrance.tscn" id="21_gate"]
+[ext_resource type="PackedScene" path="res://scenes/ladder.tscn" id="22_ladder"]
+[ext_resource type="PackedScene" path="res://scenes/flower.tscn" id="23_flower"]
+[ext_resource type="PackedScene" path="res://scenes/bush.tscn" id="24_bush"]
+[ext_resource type="PackedScene" path="res://scenes/tree.tscn" id="25_tree"]
+[ext_resource type="PackedScene" path="res://scenes/cloud.tscn" id="26_cloud"]
+[ext_resource type="PackedScene" path="res://scenes/treasure_chest.tscn" id="27_chest"]
+[ext_resource type="Script" path="res://scripts/pixel_tile_decorator.gd" id="28_decorator"]
+[ext_resource type="PackedScene" path="res://scenes/rock.tscn" id="29_rock"]
+[ext_resource type="Script" path="res://scripts/shrinking_platform.gd" id="30_shrinking"]
+[ext_resource type="Script" path="res://scripts/spike_platform.gd" id="31_spikeplat"]
+[ext_resource type="Script" path="res://scripts/disappearing_platform.gd" id="32_disappearing"]
+[ext_resource type="Script" path="res://scripts/idle_floating_platform.gd" id="33_floating"]
+[ext_resource type="PackedScene" path="res://scenes/tree_stump.tscn" id="34_stump"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_floorA"]
-size = Vector2(2650, 60)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor1A"]
+size = Vector2(1650, 800)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pit"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor1B"]
+size = Vector2(910, 800)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pit_small"]
+size = Vector2(90, 640)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pit_large"]
 size = Vector2(180, 640)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_floorB"]
-size = Vector2(1620, 60)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor2A"]
+size = Vector2(670, 800)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor2B"]
+size = Vector2(860, 800)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_spike"]
 size = Vector2(180, 60)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_floorC"]
-size = Vector2(1770, 60)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor3"]
+size = Vector2(1770, 800)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_plat_split"]
 size = Vector2(296, 24)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat"]
-size = Vector2(720, 24)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat3A"]
+size = Vector2(460, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat3B"]
+size = Vector2(240, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_plat2"]
 size = Vector2(280, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_plat4"]
 size = Vector2(200, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat_140"]
+size = Vector2(140, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat_180"]
+size = Vector2(180, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat_220"]
+size = Vector2(220, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat_260"]
+size = Vector2(260, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat_280"]
+size = Vector2(280, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_roomfloor"]
 size = Vector2(800, 60)
@@ -56,18 +98,81 @@ size = Vector2(60, 1000)
 
 [node name="TestWorld" type="Node2D" unique_id=1618266778]
 
-[node name="Floor" type="StaticBody2D" parent="." unique_id=394121252]
+[node name="PixelTileDecorator" type="Node" parent="." unique_id=987654321]
+script = ExtResource("28_decorator")
+
+[node name="ParallaxBackground" parent="." unique_id=1049481675 instance=ExtResource("18_parallax")]
+
+[node name="TutorialControls" parent="." unique_id=816688902 instance=ExtResource("19_sign")]
+position = Vector2(300, 0)
+title = "기본 조작법"
+guide_text = "이동: ← / →
+점프: Space
+공격: A
+상호작용 / 등반: Up
+레시피북: R
+인벤토리: Q
+일시정지: P"
+
+[node name="TutorialCooking" parent="." unique_id=189317977 instance=ExtResource("19_sign")]
+position = Vector2(1600, 0)
+title = "화롯불 조리 학습"
+guide_text = "슬라임을 처치하고 소재를 모으세요!
+화롯불/상점 앞에서 (W/Up) 키를 눌러
+'순정라면'을 조리할 수 있습니다."
+
+[node name="Floor1A" type="StaticBody2D" parent="." unique_id=394121252]
 collision_mask = 0
 
-[node name="ColorRect" type="TextureRect" parent="Floor" unique_id=625103616]
-offset_right = 2650.0
-offset_bottom = 60.0
-texture = ExtResource("15_ground2")
-stretch_mode = 1
+[node name="ColorRect" type="ColorRect" parent="Floor1A" unique_id=625103616]
+offset_right = 1650.0
+offset_bottom = 800.0
+color = Color(0.48, 0.32, 0.18, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1948129663]
-position = Vector2(1325, 30)
-shape = SubResource("RectangleShape2D_floorA")
+[node name="GrassTrim" type="ColorRect" parent="Floor1A/ColorRect" unique_id=1052777582]
+layout_mode = 0
+offset_right = 1650.0
+offset_bottom = 14.0
+color = Color(0.28, 0.72, 0.22, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor1A" unique_id=1948129663]
+position = Vector2(825, 400)
+shape = SubResource("RectangleShape2D_floor1A")
+
+[node name="PitSmall1" type="Area2D" parent="." unique_id=100000001]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("7_pit")
+
+[node name="ColorRect" type="ColorRect" parent="PitSmall1" unique_id=100000002]
+offset_left = 1650.0
+offset_top = 60.0
+offset_right = 1740.0
+offset_bottom = 700.0
+color = Color(0.05, 0.05, 0.08, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PitSmall1" unique_id=100000003]
+position = Vector2(1695, 380)
+shape = SubResource("RectangleShape2D_pit_small")
+
+[node name="Floor1B" type="StaticBody2D" parent="." unique_id=100000004]
+position = Vector2(1740, 0)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Floor1B" unique_id=100000005]
+offset_right = 910.0
+offset_bottom = 800.0
+color = Color(0.48, 0.32, 0.18, 1)
+
+[node name="GrassTrim" type="ColorRect" parent="Floor1B/ColorRect" unique_id=100000006]
+layout_mode = 0
+offset_right = 910.0
+offset_bottom = 14.0
+color = Color(0.28, 0.72, 0.22, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor1B" unique_id=100000007]
+position = Vector2(455, 400)
+shape = SubResource("RectangleShape2D_floor1B")
 
 [node name="PitZone" type="Area2D" parent="." unique_id=1374013278]
 collision_layer = 0
@@ -83,21 +188,61 @@ color = Color(0.05, 0.05, 0.08, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PitZone" unique_id=646897203]
 position = Vector2(2740, 380)
-shape = SubResource("RectangleShape2D_pit")
+shape = SubResource("RectangleShape2D_pit_large")
 
-[node name="Floor2" type="StaticBody2D" parent="." unique_id=1057660630]
+[node name="Floor2A" type="StaticBody2D" parent="." unique_id=1057660630]
 position = Vector2(2830, 0)
 collision_mask = 0
 
-[node name="ColorRect" type="TextureRect" parent="Floor2" unique_id=205978056]
-offset_right = 1620.0
-offset_bottom = 60.0
-texture = ExtResource("15_ground2")
-stretch_mode = 1
+[node name="ColorRect" type="ColorRect" parent="Floor2A" unique_id=205978056]
+offset_right = 670.0
+offset_bottom = 800.0
+color = Color(0.48, 0.32, 0.18, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2" unique_id=317323332]
-position = Vector2(810, 30)
-shape = SubResource("RectangleShape2D_floorB")
+[node name="GrassTrim" type="ColorRect" parent="Floor2A/ColorRect" unique_id=89797688]
+layout_mode = 0
+offset_right = 670.0
+offset_bottom = 14.0
+color = Color(0.28, 0.72, 0.22, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2A" unique_id=317323332]
+position = Vector2(335, 400)
+shape = SubResource("RectangleShape2D_floor2A")
+
+[node name="PitSmall2" type="Area2D" parent="." unique_id=100000008]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("7_pit")
+
+[node name="ColorRect" type="ColorRect" parent="PitSmall2" unique_id=100000009]
+offset_left = 3500.0
+offset_top = 60.0
+offset_right = 3590.0
+offset_bottom = 700.0
+color = Color(0.05, 0.05, 0.08, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PitSmall2" unique_id=100000010]
+position = Vector2(3545, 380)
+shape = SubResource("RectangleShape2D_pit_small")
+
+[node name="Floor2B" type="StaticBody2D" parent="." unique_id=100000011]
+position = Vector2(3590, 0)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Floor2B" unique_id=100000012]
+offset_right = 860.0
+offset_bottom = 800.0
+color = Color(0.48, 0.32, 0.18, 1)
+
+[node name="GrassTrim" type="ColorRect" parent="Floor2B/ColorRect" unique_id=100000013]
+layout_mode = 0
+offset_right = 860.0
+offset_bottom = 14.0
+color = Color(0.28, 0.72, 0.22, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2B" unique_id=100000014]
+position = Vector2(430, 400)
+shape = SubResource("RectangleShape2D_floor2B")
 
 [node name="Pit2Void" type="ColorRect" parent="." unique_id=1681398241]
 offset_left = 4450.0
@@ -126,27 +271,31 @@ shape = SubResource("RectangleShape2D_spike")
 position = Vector2(4630, 0)
 collision_mask = 0
 
-[node name="ColorRect" type="TextureRect" parent="Floor3" unique_id=1686143231]
+[node name="ColorRect" type="ColorRect" parent="Floor3" unique_id=1686143231]
 offset_right = 1770.0
-offset_bottom = 60.0
-texture = ExtResource("15_ground2")
-stretch_mode = 1
+offset_bottom = 800.0
+color = Color(0.48, 0.32, 0.18, 1)
+
+[node name="GrassTrim" type="ColorRect" parent="Floor3/ColorRect" unique_id=1967804629]
+layout_mode = 0
+offset_right = 1770.0
+offset_bottom = 14.0
+color = Color(0.28, 0.72, 0.22, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3" unique_id=980002307]
-position = Vector2(885, 30)
-shape = SubResource("RectangleShape2D_floorC")
+position = Vector2(885, 400)
+shape = SubResource("RectangleShape2D_floor3")
 
 [node name="Platform" type="StaticBody2D" parent="." unique_id=1840450348]
 position = Vector2(3588, -77)
 collision_mask = 0
 
-[node name="ColorRect" type="TextureRect" parent="Platform" unique_id=312785226]
+[node name="ColorRect" type="ColorRect" parent="Platform" unique_id=312785226]
 offset_left = -148.0
 offset_top = -12.0
 offset_right = 148.0
 offset_bottom = 12.0
-texture = ExtResource("15_ground2")
-stretch_mode = 1
+color = Color(0.48, 0.35, 0.2, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform" unique_id=256737587]
 shape = SubResource("RectangleShape2D_plat_split")
@@ -155,44 +304,60 @@ shape = SubResource("RectangleShape2D_plat_split")
 position = Vector2(4012, -77)
 collision_mask = 0
 
-[node name="ColorRect" type="TextureRect" parent="Platform5" unique_id=2119670199]
+[node name="ColorRect" type="ColorRect" parent="Platform5" unique_id=2119670199]
 offset_left = -148.0
 offset_top = -12.0
 offset_right = 148.0
 offset_bottom = 12.0
-texture = ExtResource("15_ground2")
-stretch_mode = 1
+color = Color(0.48, 0.35, 0.2, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform5" unique_id=1151633203]
 shape = SubResource("RectangleShape2D_plat_split")
 
-[node name="Platform3" type="StaticBody2D" parent="." unique_id=285979763]
-position = Vector2(1400, -77)
+[node name="Platform3A" type="StaticBody2D" parent="." unique_id=285979763]
+position = Vector2(1270, -77)
 collision_mask = 0
+script = ExtResource("31_spikeplat")
 
-[node name="ColorRect" type="TextureRect" parent="Platform3" unique_id=1564996903]
-offset_left = -360.0
+[node name="ColorRect" type="ColorRect" parent="Platform3A" unique_id=1564996903]
+offset_left = -230.0
 offset_top = -12.0
-offset_right = 360.0
+offset_right = 230.0
 offset_bottom = 12.0
-texture = ExtResource("15_ground2")
-stretch_mode = 1
+color = Color(0.48, 0.35, 0.2, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3" unique_id=786522902]
-shape = SubResource("RectangleShape2D_plat")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3A" unique_id=786522902]
+shape = SubResource("RectangleShape2D_plat3A")
+
+[node name="Platform3B" type="AnimatableBody2D" parent="." unique_id=100000076]
+position = Vector2(1870, -77)
+collision_mask = 0
+script = ExtResource("10_moving")
+vertical = true
+move_range = 260.0
+period = 4.0
+
+[node name="ColorRect" type="ColorRect" parent="Platform3B" unique_id=100000076]
+offset_left = -120.0
+offset_top = -12.0
+offset_right = 120.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3B" unique_id=100000077]
+shape = SubResource("RectangleShape2D_plat3B")
 
 [node name="Platform2" type="AnimatableBody2D" parent="." unique_id=840905299]
 position = Vector2(3800, -167)
 collision_mask = 0
 script = ExtResource("10_moving")
 
-[node name="ColorRect" type="TextureRect" parent="Platform2" unique_id=396858341]
+[node name="ColorRect" type="ColorRect" parent="Platform2" unique_id=396858341]
 offset_left = -140.0
 offset_top = -12.0
 offset_right = 140.0
 offset_bottom = 12.0
-texture = ExtResource("15_ground2")
-stretch_mode = 1
+color = Color(0.48, 0.35, 0.2, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2" unique_id=705576994]
 shape = SubResource("RectangleShape2D_plat2")
@@ -201,53 +366,687 @@ shape = SubResource("RectangleShape2D_plat2")
 position = Vector2(3800, -257)
 collision_mask = 0
 
-[node name="ColorRect" type="TextureRect" parent="Platform4" unique_id=1781804364]
+[node name="ColorRect" type="ColorRect" parent="Platform4" unique_id=1781804364]
 offset_left = -100.0
 offset_top = -12.0
 offset_right = 100.0
 offset_bottom = 12.0
-texture = ExtResource("15_ground2")
-stretch_mode = 1
+color = Color(0.48, 0.35, 0.2, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform4" unique_id=1213454870]
 shape = SubResource("RectangleShape2D_plat4")
 
-[node name="CoinBox" parent="." unique_id=1566102600 instance=ExtResource("11_coinbox")]
+[node name="Platform6" type="StaticBody2D" parent="." unique_id=100000020]
+position = Vector2(650, -77)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Platform6" unique_id=100000021]
+offset_left = -110.0
+offset_top = -12.0
+offset_right = 110.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform6" unique_id=100000022]
+shape = SubResource("RectangleShape2D_plat_220")
+
+[node name="Platform7" type="AnimatableBody2D" parent="." unique_id=100000023]
+position = Vector2(850, -167)
+collision_mask = 0
+script = ExtResource("10_moving")
+
+[node name="ColorRect" type="ColorRect" parent="Platform7" unique_id=100000024]
+offset_left = -90.0
+offset_top = -12.0
+offset_right = 90.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform7" unique_id=100000025]
+shape = SubResource("RectangleShape2D_plat_180")
+
+[node name="Platform8" type="AnimatableBody2D" parent="." unique_id=100000026]
+position = Vector2(1050, -257)
+collision_mask = 0
+script = ExtResource("10_moving")
+
+[node name="ColorRect" type="ColorRect" parent="Platform8" unique_id=100000027]
+offset_left = -70.0
+offset_top = -12.0
+offset_right = 70.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform8" unique_id=100000028]
+shape = SubResource("RectangleShape2D_plat_140")
+
+[node name="Platform9" type="StaticBody2D" parent="." unique_id=100000029]
+position = Vector2(1250, -347)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Platform9" unique_id=100000030]
+offset_left = -90.0
+offset_top = -12.0
+offset_right = 90.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform9" unique_id=100000031]
+shape = SubResource("RectangleShape2D_plat_180")
+
+[node name="Platform10" type="StaticBody2D" parent="." unique_id=100000032]
+position = Vector2(1500, -437)
+collision_mask = 0
+script = ExtResource("32_disappearing")
+
+[node name="ColorRect" type="ColorRect" parent="Platform10" unique_id=100000033]
+offset_left = -130.0
+offset_top = -12.0
+offset_right = 130.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform10" unique_id=100000034]
+shape = SubResource("RectangleShape2D_plat_260")
+
+[node name="Platform11" type="AnimatableBody2D" parent="." unique_id=100000035]
+position = Vector2(2100, -270)
+collision_mask = 0
+script = ExtResource("30_shrinking")
+
+[node name="ColorRect" type="ColorRect" parent="Platform11" unique_id=100000036]
+offset_left = -130.0
+offset_top = -12.0
+offset_right = 130.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform11" unique_id=100000037]
+shape = SubResource("RectangleShape2D_plat_260")
+
+[node name="Platform12" type="AnimatableBody2D" parent="." unique_id=100000038]
+position = Vector2(2250, -167)
+collision_mask = 0
+script = ExtResource("10_moving")
+
+[node name="ColorRect" type="ColorRect" parent="Platform12" unique_id=100000039]
+offset_left = -90.0
+offset_top = -12.0
+offset_right = 90.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform12" unique_id=100000040]
+shape = SubResource("RectangleShape2D_plat_180")
+
+[node name="Platform13" type="AnimatableBody2D" parent="." unique_id=100000041]
+position = Vector2(2500, -257)
+collision_mask = 0
+script = ExtResource("10_moving")
+
+[node name="ColorRect" type="ColorRect" parent="Platform13" unique_id=100000042]
+offset_left = -100.0
+offset_top = -12.0
+offset_right = 100.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform13" unique_id=100000043]
+shape = SubResource("RectangleShape2D_plat4")
+
+[node name="Platform14" type="AnimatableBody2D" parent="." unique_id=100000044]
+position = Vector2(2700, -347)
+collision_mask = 0
+script = ExtResource("10_moving")
+vertical = true
+
+[node name="ColorRect" type="ColorRect" parent="Platform14" unique_id=100000045]
+offset_left = -110.0
+offset_top = -12.0
+offset_right = 110.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform14" unique_id=100000046]
+shape = SubResource("RectangleShape2D_plat_220")
+
+[node name="Platform15" type="StaticBody2D" parent="." unique_id=100000047]
+position = Vector2(2950, -437)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Platform15" unique_id=100000048]
+offset_left = -140.0
+offset_top = -12.0
+offset_right = 140.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform15" unique_id=100000049]
+shape = SubResource("RectangleShape2D_plat_280")
+
+[node name="Platform16" type="StaticBody2D" parent="." unique_id=100000050]
+position = Vector2(3150, -77)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Platform16" unique_id=100000051]
+offset_left = -90.0
+offset_top = -12.0
+offset_right = 90.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform16" unique_id=100000052]
+shape = SubResource("RectangleShape2D_plat_180")
+
+[node name="Platform17" type="AnimatableBody2D" parent="." unique_id=100000053]
+position = Vector2(4300, -347)
+collision_mask = 0
+script = ExtResource("10_moving")
+
+[node name="ColorRect" type="ColorRect" parent="Platform17" unique_id=100000054]
+offset_left = -100.0
+offset_top = -12.0
+offset_right = 100.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform17" unique_id=100000055]
+shape = SubResource("RectangleShape2D_plat4")
+
+[node name="Platform18" type="AnimatableBody2D" parent="." unique_id=100000056]
+position = Vector2(4550, -437)
+collision_mask = 0
+script = ExtResource("10_moving")
+vertical = true
+
+[node name="ColorRect" type="ColorRect" parent="Platform18" unique_id=100000057]
+offset_left = -130.0
+offset_top = -12.0
+offset_right = 130.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform18" unique_id=100000058]
+shape = SubResource("RectangleShape2D_plat_260")
+
+[node name="Platform19" type="StaticBody2D" parent="." unique_id=100000059]
+position = Vector2(4900, -167)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Platform19" unique_id=100000060]
+offset_left = -110.0
+offset_top = -12.0
+offset_right = 110.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform19" unique_id=100000061]
+shape = SubResource("RectangleShape2D_plat_220")
+
+[node name="Platform20" type="StaticBody2D" parent="." unique_id=100000062]
+position = Vector2(5150, -257)
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Platform20" unique_id=100000063]
+offset_left = -90.0
+offset_top = -12.0
+offset_right = 90.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform20" unique_id=100000064]
+shape = SubResource("RectangleShape2D_plat_180")
+
+[node name="Platform5TierA" type="AnimatableBody2D" parent="." unique_id=100000201]
+position = Vector2(2100, -450)
+collision_mask = 0
+script = ExtResource("10_moving")
+vertical = true
+move_range = 25.0
+period = 3.0
+
+[node name="CoinBoxOnPlatform5TierA" parent="Platform5TierA" unique_id=100000888 instance=ExtResource("11_coinbox")]
+position = Vector2(-71, -12)
+
+[node name="ColorRect" type="ColorRect" parent="Platform5TierA" unique_id=100000202]
+offset_left = -100.0
+offset_top = -12.0
+offset_right = 100.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform5TierA" unique_id=100000203]
+shape = SubResource("RectangleShape2D_plat4")
+
+[node name="Platform5TierB" type="StaticBody2D" parent="." unique_id=100000204]
+position = Vector2(3400, -450)
+
+[node name="ColorRect" type="ColorRect" parent="Platform5TierB" unique_id=100000205]
+offset_left = -110.0
+offset_top = -12.0
+offset_right = 110.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform5TierB" unique_id=100000206]
+shape = SubResource("RectangleShape2D_plat_220")
+
+[node name="Platform5TierC" type="StaticBody2D" parent="." unique_id=100000207]
+position = Vector2(4400, -450)
+
+[node name="ColorRect" type="ColorRect" parent="Platform5TierC" unique_id=100000208]
+offset_left = -100.0
+offset_top = -12.0
+offset_right = 100.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform5TierC" unique_id=100000209]
+shape = SubResource("RectangleShape2D_plat4")
+
+[node name="Platform6TierA" type="StaticBody2D" parent="." unique_id=100000210]
+position = Vector2(1800, -540)
+
+[node name="ColorRect" type="ColorRect" parent="Platform6TierA" unique_id=100000211]
+offset_left = -100.0
+offset_top = -12.0
+offset_right = 100.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform6TierA" unique_id=100000212]
+shape = SubResource("RectangleShape2D_plat4")
+
+[node name="Platform6TierB" type="StaticBody2D" parent="." unique_id=100000213]
+position = Vector2(3900, -540)
+
+[node name="ColorRect" type="ColorRect" parent="Platform6TierB" unique_id=100000214]
+offset_left = -110.0
+offset_top = -12.0
+offset_right = 110.0
+offset_bottom = 12.0
+color = Color(0.48, 0.35, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform6TierB" unique_id=100000215]
+shape = SubResource("RectangleShape2D_plat_220")
+
+[node name="Ladder5TierA" parent="." unique_id=100000220 instance=ExtResource("22_ladder")]
+position = Vector2(2100, 0)
+height = 450.0
+is_single_strand = true
+bottom_cut_ratio = 0.6
+can_snap = true
+
+[node name="Ladder5TierC" parent="." unique_id=100000222 instance=ExtResource("22_ladder")]
+position = Vector2(4400, 0)
+height = 450.0
+is_single_strand = true
+
+[node name="Ladder6TierA" parent="." unique_id=100000223 instance=ExtResource("22_ladder")]
+position = Vector2(1800, 0)
+height = 540.0
+is_single_strand = true
+
+[node name="Ladder6TierB" parent="." unique_id=100000224 instance=ExtResource("22_ladder")]
+position = Vector2(3900, 0)
+height = 540.0
+is_single_strand = true
+can_snap = true
+
+[node name="Ladder1" parent="." unique_id=100000070 instance=ExtResource("22_ladder")]
+position = Vector2(1250, 0)
+height = 347.0
+is_vine = true
+is_broken_top = true
+
+[node name="Ladder5" parent="." unique_id=100000074 instance=ExtResource("22_ladder")]
+position = Vector2(4300, 0)
+height = 347.0
+
+[node name="ChestHigh1" parent="." unique_id=100000080 instance=ExtResource("27_chest")]
+position = Vector2(1560, -452)
+reward_gold = 50
+recipe_unlock = "Cheese Ramen"
+
+[node name="ChestHigh2" parent="." unique_id=100000081 instance=ExtResource("27_chest")]
+position = Vector2(2980, -452)
+reward_gold = 60
+recipe_unlock = "Kimchi Ramen"
+
+[node name="ChestHigh3" parent="Platform18" unique_id=100000082 instance=ExtResource("27_chest")]
+position = Vector2(30, -15)
+reward_gold = 75
+
+[node name="SlimeHigh1" parent="." unique_id=100000090 instance=ExtResource("2_slime")]
+position = Vector2(1050, -273)
+level = 1
+
+[node name="SlimeHigh2" parent="." unique_id=100000091 instance=ExtResource("2_slime")]
+position = Vector2(1250, -363)
+level = 1
+
+[node name="SlimeHigh3" parent="." unique_id=100000092 instance=ExtResource("2_slime")]
+position = Vector2(1440, -453)
+level = 1
+
+[node name="SlimeHigh4" parent="." unique_id=100000093 instance=ExtResource("2_slime")]
+position = Vector2(2700, -363)
+level = 1
+
+[node name="SlimeHigh5" parent="." unique_id=100000094 instance=ExtResource("2_slime")]
+position = Vector2(2900, -453)
+level = 1
+
+[node name="SlimeHigh6" parent="." unique_id=100000095 instance=ExtResource("2_slime")]
+position = Vector2(4520, -453)
+level = 1
+
+[node name="Bush1" parent="." unique_id=100000100 instance=ExtResource("24_bush")]
+position = Vector2(470, 0)
+bush_type = 1
+custom_scale = Vector2(1.2, 1.1)
+
+[node name="Bush2" parent="." unique_id=100000101 instance=ExtResource("24_bush")]
+position = Vector2(540, 0)
+bush_type = 5
+custom_scale = Vector2(1.0, 1.0)
+
+[node name="Bush3" parent="." unique_id=100000102 instance=ExtResource("24_bush")]
+position = Vector2(850, 0)
+bush_type = 3
+custom_scale = Vector2(1.1, 1.2)
+
+[node name="Bush4" parent="." unique_id=100000103 instance=ExtResource("24_bush")]
+position = Vector2(1100, 0)
+bush_type = 2
+custom_scale = Vector2(0.9, 0.9)
+
+[node name="Bush5" parent="." unique_id=100000104 instance=ExtResource("24_bush")]
+position = Vector2(1450, 0)
+bush_type = 4
+custom_scale = Vector2(1.3, 1.1)
+
+[node name="Bush6" parent="." unique_id=100000105 instance=ExtResource("24_bush")]
+position = Vector2(1950, 0)
+bush_type = 5
+custom_scale = Vector2(1.1, 1.1)
+
+[node name="Bush7" parent="." unique_id=100000106 instance=ExtResource("24_bush")]
+position = Vector2(2350, 0)
+bush_type = 1
+custom_scale = Vector2(1.54, 1.32)
+
+[node name="ChestBehindBush7" parent="." unique_id=100000889 instance=ExtResource("27_chest")]
+position = Vector2(2350, 0)
+reward_gold = 100
+recipe_unlock = "Seafood Jjamppong"
+
+[node name="Bush8" parent="." unique_id=100000107 instance=ExtResource("24_bush")]
+position = Vector2(2550, 0)
+bush_type = 3
+custom_scale = Vector2(0.8, 1.0)
+
+[node name="Bush9" parent="." unique_id=100000108 instance=ExtResource("24_bush")]
+position = Vector2(3050, 0)
+bush_type = 2
+custom_scale = Vector2(1.2, 1.1)
+
+[node name="Bush10" parent="." unique_id=100000109 instance=ExtResource("24_bush")]
+position = Vector2(3350, 0)
+bush_type = 5
+custom_scale = Vector2(1.0, 1.0)
+
+[node name="Bush11" parent="." unique_id=100000110 instance=ExtResource("24_bush")]
+position = Vector2(3750, 0)
+bush_type = 1
+custom_scale = Vector2(1.3, 1.3)
+
+[node name="Bush12" parent="." unique_id=100000111 instance=ExtResource("24_bush")]
+position = Vector2(4200, 0)
+bush_type = 4
+custom_scale = Vector2(1.0, 1.0)
+
+[node name="Bush13" parent="." unique_id=100000112 instance=ExtResource("24_bush")]
+position = Vector2(4850, 0)
+bush_type = 3
+custom_scale = Vector2(1.2, 1.2)
+
+[node name="Bush14" parent="." unique_id=100000113 instance=ExtResource("24_bush")]
+position = Vector2(5250, 0)
+bush_type = 5
+custom_scale = Vector2(1.1, 1.1)
+
+[node name="Bush15" parent="." unique_id=100000114 instance=ExtResource("24_bush")]
+position = Vector2(2000, -77)
+bush_type = 2
+custom_scale = Vector2(1.0, 1.0)
+
+[node name="Bush16" parent="." unique_id=100000115 instance=ExtResource("24_bush")]
+position = Vector2(4900, -167)
+bush_type = 4
+custom_scale = Vector2(1.2, 1.0)
+
+[node name="Flower2" parent="." unique_id=100000121 instance=ExtResource("23_flower")]
+position = Vector2(950, 0)
+flower_type = 2
+drop_type = "material"
+drop_material_name = "noodle"
+drop_amount = 2
+
+[node name="Flower3" parent="." unique_id=100000122 instance=ExtResource("23_flower")]
+position = Vector2(1300, 0)
+flower_type = 3
+drop_type = "gold"
+drop_amount = 20
+
+[node name="Flower4" parent="." unique_id=100000123 instance=ExtResource("23_flower")]
+position = Vector2(2150, 0)
+flower_type = 1
+drop_type = "material"
+drop_material_name = "water"
+drop_amount = 3
+
+[node name="Flower5" parent="." unique_id=100000124 instance=ExtResource("23_flower")]
+position = Vector2(3300, 0)
+flower_type = 2
+drop_type = "gold"
+drop_amount = 25
+
+[node name="Flower6" parent="." unique_id=100000125 instance=ExtResource("23_flower")]
+position = Vector2(4100, 0)
+flower_type = 3
+drop_type = "material"
+drop_material_name = "meat_stock"
+drop_amount = 2
+
+[node name="Flower7" parent="." unique_id=100000126 instance=ExtResource("23_flower")]
+position = Vector2(5000, 0)
+flower_type = 1
+drop_type = "gold"
+drop_amount = 30
+
+[node name="FlowerMon1" parent="." unique_id=100000127 instance=ExtResource("2_slime")]
+position = Vector2(2250, -195)
+visual_skin = "flower"
+
+[node name="FlowerMon2" parent="." unique_id=100000130 instance=ExtResource("2_slime")]
+position = Vector2(4900, -195)
+visual_skin = "flower"
+
+[node name="Flower9" parent="." unique_id=100000128 instance=ExtResource("23_flower")]
+position = Vector2(5150, -257)
+flower_type = 3
+drop_type = "gold"
+drop_amount = 35
+
+[node name="FlowerExtra1" parent="." unique_id=100000901 instance=ExtResource("23_flower")]
+position = Vector2(350, 0)
+flower_type = 1
+drop_type = "gold"
+drop_amount = 15
+
+[node name="FlowerExtra2" parent="." unique_id=100000902 instance=ExtResource("23_flower")]
+position = Vector2(600, 0)
+flower_type = 2
+drop_type = "material"
+drop_material_name = "water"
+
+[node name="FlowerExtra3" parent="." unique_id=100000903 instance=ExtResource("23_flower")]
+position = Vector2(1000, 0)
+flower_type = 3
+
+[node name="FlowerExtra4" parent="." unique_id=100000904 instance=ExtResource("23_flower")]
+position = Vector2(1320, 0)
+flower_type = 1
+
+[node name="FlowerExtra5" parent="." unique_id=100000905 instance=ExtResource("23_flower")]
+position = Vector2(1750, 0)
+flower_type = 2
+
+[node name="FlowerExtra6" parent="." unique_id=100000906 instance=ExtResource("23_flower")]
+position = Vector2(2000, 0)
+flower_type = 3
+
+[node name="FlowerExtra7" parent="." unique_id=100000907 instance=ExtResource("23_flower")]
+position = Vector2(2450, 0)
+flower_type = 1
+
+[node name="FlowerExtra9" parent="." unique_id=100000909 instance=ExtResource("23_flower")]
+position = Vector2(3100, 0)
+flower_type = 3
+
+[node name="FlowerExtra10" parent="." unique_id=100000910 instance=ExtResource("23_flower")]
+position = Vector2(3500, 0)
+flower_type = 1
+
+[node name="FlowerExtra11" parent="." unique_id=100000911 instance=ExtResource("23_flower")]
+position = Vector2(3900, 0)
+flower_type = 2
+
+[node name="FlowerExtra12" parent="." unique_id=100000912 instance=ExtResource("23_flower")]
+position = Vector2(4300, 0)
+flower_type = 3
+
+[node name="FlowerExtra13" parent="." unique_id=100000913 instance=ExtResource("23_flower")]
+position = Vector2(4700, 0)
+flower_type = 1
+
+[node name="FlowerExtra14" parent="." unique_id=100000914 instance=ExtResource("23_flower")]
+position = Vector2(4800, 0)
+flower_type = 2
+
+[node name="FlowerExtra15" parent="." unique_id=100000915 instance=ExtResource("23_flower")]
+position = Vector2(5100, 0)
+flower_type = 3
+
+[node name="TreeStumpStart" parent="." unique_id=100000890 instance=ExtResource("34_stump")]
+position = Vector2(700, 0)
+
+[node name="Tree1" parent="." unique_id=100000140 instance=ExtResource("25_tree")]
+position = Vector2(200, 0)
+tree_type = 1
+
+[node name="Tree2" parent="." unique_id=100000141 instance=ExtResource("25_tree")]
+position = Vector2(800, 0)
+tree_type = 2
+
+[node name="Tree3" parent="." unique_id=100000142 instance=ExtResource("25_tree")]
+position = Vector2(1500, 0)
+tree_type = 1
+
+[node name="Tree4" parent="." unique_id=100000143 instance=ExtResource("25_tree")]
+position = Vector2(2300, 0)
+tree_type = 2
+
+[node name="BigGolem1" parent="." unique_id=100000144 instance=ExtResource("14_golem")]
+position = Vector2(3000, -48)
+scale = Vector2(2, 2)
+
+[node name="Tree6" parent="." unique_id=100000145 instance=ExtResource("25_tree")]
+position = Vector2(3700, 0)
+tree_type = 2
+
+[node name="Tree7" parent="." unique_id=100000146 instance=ExtResource("25_tree")]
+position = Vector2(4900, 0)
+tree_type = 1
+
+[node name="Rock1" parent="." unique_id=100000160 instance=ExtResource("29_rock")]
+position = Vector2(1135, 0)
+rock_type = 1
+
+[node name="Rock2" parent="." unique_id=100000161 instance=ExtResource("29_rock")]
+position = Vector2(1820, 0)
+rock_type = 3
+
+[node name="Rock3" parent="." unique_id=100000162 instance=ExtResource("29_rock")]
+position = Vector2(2900, 0)
+rock_type = 2
+
+[node name="Rock4" parent="." unique_id=100000163 instance=ExtResource("29_rock")]
+position = Vector2(3620, 0)
+rock_type = 4
+
+[node name="Rock5" parent="." unique_id=100000164 instance=ExtResource("29_rock")]
+position = Vector2(4650, 0)
+rock_type = 1
+
+[node name="Rock6" parent="." unique_id=100000165 instance=ExtResource("29_rock")]
+position = Vector2(5300, 0)
+rock_type = 3
+
+[node name="Cloud1" parent="." unique_id=100000150 instance=ExtResource("26_cloud")]
+position = Vector2(300, -350)
+float_speed = 12.0
+
+[node name="Cloud2" parent="." unique_id=100000151 instance=ExtResource("26_cloud")]
+position = Vector2(1200, -450)
+float_speed = 16.0
+
+[node name="Cloud3" parent="." unique_id=100000152 instance=ExtResource("26_cloud")]
+position = Vector2(2200, -380)
+float_speed = 10.0
+
+[node name="Cloud4" parent="." unique_id=100000153 instance=ExtResource("26_cloud")]
+position = Vector2(3400, -420)
+float_speed = 18.0
+
+[node name="Cloud5" parent="." unique_id=100000154 instance=ExtResource("26_cloud")]
+position = Vector2(4500, -400)
+float_speed = 14.0
+
+[node name="Cloud6" parent="." unique_id=100000155 instance=ExtResource("26_cloud")]
+position = Vector2(5600, -360)
+float_speed = 15.0
+
+[node name="TreasureChest" parent="." unique_id=1566102600 instance=ExtResource("27_chest")]
 position = Vector2(3800, -269)
-coin_value = 2
+reward_gold = 50
 
 [node name="DADA" parent="." unique_id=1821650705 instance=ExtResource("1_dada")]
-position = Vector2(480, -90)
-max_health = 7
+position = Vector2(76, -90)
+speed = 300.0
 
 [node name="Slime" parent="." unique_id=221939361 instance=ExtResource("2_slime")]
-position = Vector2(620, -16)
-max_health = 1
+position = Vector2(520, -10)
 
 [node name="Slime3" parent="." unique_id=54479284 instance=ExtResource("2_slime")]
-position = Vector2(880, -16)
-max_health = 1
+position = Vector2(980, -16)
 
 [node name="Slime4Lv2" parent="." unique_id=1177768328 instance=ExtResource("2_slime")]
 position = Vector2(1400, -105)
-max_health = 2
 level = 2
 
 [node name="Slime5" parent="." unique_id=1513976896 instance=ExtResource("2_slime")]
 position = Vector2(2100, -16)
-max_health = 1
 
 [node name="Slime6" parent="." unique_id=1197250356 instance=ExtResource("2_slime")]
 position = Vector2(2450, -16)
-max_health = 1
 
 [node name="Slime7" parent="." unique_id=917807406 instance=ExtResource("2_slime")]
 position = Vector2(3040, -16)
-max_health = 1
 
 [node name="Slime8Lv2" parent="." unique_id=1859820275 instance=ExtResource("2_slime")]
 position = Vector2(3700, -105)
-max_health = 2
 level = 2
 
 [node name="Slime9Lv3" parent="." unique_id=1413858077 instance=ExtResource("2_slime")]
@@ -257,15 +1056,12 @@ level = 3
 
 [node name="Slime10" parent="." unique_id=881403548 instance=ExtResource("2_slime")]
 position = Vector2(4300, -16)
-max_health = 1
 
 [node name="Slime11" parent="." unique_id=1059948111 instance=ExtResource("2_slime")]
 position = Vector2(4720, -16)
-max_health = 1
 
 [node name="Slime12" parent="." unique_id=2049930206 instance=ExtResource("2_slime")]
 position = Vector2(5550, -16)
-max_health = 1
 
 [node name="Slime13Lv3" parent="." unique_id=503898191 instance=ExtResource("2_slime")]
 position = Vector2(5700, -16)
@@ -274,18 +1070,12 @@ level = 3
 
 [node name="Slime14" parent="." unique_id=396969825 instance=ExtResource("2_slime")]
 position = Vector2(6100, -16)
-max_health = 1
 
 [node name="SecretSpot" parent="." unique_id=1855744795 instance=ExtResource("3_secret")]
 position = Vector2(1920, -120)
 
-[node name="ShopEntrance" parent="." unique_id=1880348070 instance=ExtResource("12_entrance")]
-position = Vector2(6200, -48)
-room_entry_position = Vector2(6650, 1096)
-room_limit_left = 6600.0
-room_limit_top = 960.0
-room_limit_right = 7400.0
-room_limit_bottom = 1220.0
+[node name="VillageEntrance" parent="." unique_id=1880348070 instance=ExtResource("21_gate")]
+position = Vector2(5850, 0)
 
 [node name="HiddenDoor" parent="." unique_id=1563240578 instance=ExtResource("4_door")]
 position = Vector2(5920, -48)
@@ -411,6 +1201,19 @@ shape = SubResource("RectangleShape2D_endwall")
 
 [node name="Golem1" parent="." unique_id=1810292080 instance=ExtResource("14_golem")]
 position = Vector2(1800, -24)
+
+[node name="Golem2" parent="." unique_id=1810292082 instance=ExtResource("14_golem")]
+position = Vector2(4200, -24)
+
+[node name="TreeGolem1" parent="." unique_id=1810292081 instance=ExtResource("14_golem")]
+position = Vector2(4850, -24)
+golem_type = "tree_golem"
+touch_damage = 0
+
+[node name="FlowerMon3" parent="." unique_id=100000129 instance=ExtResource("2_slime")]
+position = Vector2(3700, 0)
+visual_skin = "flower"
+is_flower_monster = true
 
 [node name="Mole1" parent="." unique_id=761363853 instance=ExtResource("15_mole")]
 position = Vector2(3400, -12)

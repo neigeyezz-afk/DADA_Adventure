@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3 uid="uid://do2kanjltd35o"]
+
+[ext_resource type="Script" path="res://scripts/tutorial_sign.gd" id="1_sign"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sign"]
+size = Vector2(80, 80)
+
+[node name="TutorialSign" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_sign")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -30)
+shape = SubResource("RectangleShape2D_sign")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+
+[node name="PromptLabel" type="Label" parent="."]
+visible = false
+offset_left = -60.0
+offset_top = -85.0
+offset_right = 60.0
+offset_bottom = -62.0
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1.0, 0.9, 0.4, 1)
+text = "[ 🕹️ 레트로 조이스틱 ]"
+horizontal_alignment = 1
+
+[node name="GuidePanel" type="Panel" parent="."]
+visible = false
+offset_left = -110.0
+offset_top = -250.0
+offset_right = 110.0
+offset_bottom = -65.0
+
+[node name="VBox" type="VBoxContainer" parent="GuidePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = -14.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="GuidePanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(1.0, 0.88, 0.3, 1)
+text = "🕹️ 기본 조작법"
+
+[node name="TextLabel" type="Label" parent="GuidePanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "이동: ← / →
+점프: Space
+공격: A
+상호작용/등반: W / Up
+레시피북: R
+인벤토리: Q
+일시정지: P"
+autowrap_mode = 2

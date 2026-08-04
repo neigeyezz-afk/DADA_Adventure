@@ -3,32 +3,246 @@
 [ext_resource type="Script" uid="uid://bjdsqq0eu2tk8" path="res://scripts/dada.gd" id="1_457pe"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(32, 64)
+size = Vector2(38, 52)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sword"]
-size = Vector2(30, 44)
+size = Vector2(52, 56)
 
 [node name="DADA" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_457pe")
 
+[node name="Cape" type="ColorRect" parent="."]
+offset_left = -6.0
+offset_top = 2.0
+offset_right = 6.0
+offset_bottom = 38.0
+color = Color(0.88, 0.2, 0.28, 1)
+
+[node name="CapeFold1" type="ColorRect" parent="Cape"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 4.0
+offset_right = 7.0
+offset_bottom = 32.0
+color = Color(0.78, 0.16, 0.22, 1)
+
+[node name="CapeShadow" type="ColorRect" parent="Cape"]
+layout_mode = 0
+offset_top = 28.0
+offset_right = 14.0
+offset_bottom = 36.0
+color = Color(0.62, 0.12, 0.18, 1)
+
 [node name="ColorRect" type="ColorRect" parent="."]
-visible = false
-offset_right = 32.0
-offset_bottom = 64.0
-color = Color(0.55, 0.6, 0.7, 1)
+offset_right = 38.0
+offset_bottom = 28.0
+color = Color(0.95, 0.78, 0.22, 1)
+
+[node name="PotInnerOpening" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -3.0
+offset_right = 36.0
+offset_bottom = 3.0
+color = Color(0.68, 0.48, 0.12, 1)
+
+[node name="PotRimTop" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = -3.0
+offset_top = -6.0
+offset_right = 41.0
+offset_bottom = -1.0
+color = Color(1.0, 0.92, 0.45, 1)
+
+[node name="PotRimShadow" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = -3.0
+offset_top = -1.0
+offset_right = 41.0
+offset_bottom = 2.0
+color = Color(0.78, 0.58, 0.15, 1)
+
+[node name="PotBodyHighlight" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 7.0
+offset_bottom = 25.0
+color = Color(1.0, 0.95, 0.6, 0.65)
+
+[node name="PotBodyShadow" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 3.0
+offset_right = 37.0
+offset_bottom = 26.0
+color = Color(0.72, 0.52, 0.14, 0.75)
+
+[node name="HandleLeft" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 4.0
+offset_right = 0.0
+offset_bottom = 18.0
+color = Color(0.88, 0.68, 0.18, 1)
+
+[node name="HandleLeftHole" type="ColorRect" parent="ColorRect/HandleLeft"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 3.0
+offset_right = 6.0
+offset_bottom = 11.0
+color = Color(0.12, 0.14, 0.22, 0.6)
+
+[node name="HandleLeftHighlight" type="ColorRect" parent="ColorRect/HandleLeft"]
+layout_mode = 0
+offset_right = 2.0
+offset_bottom = 14.0
+color = Color(1.0, 0.88, 0.35, 1)
+
+[node name="HandleRight" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 4.0
+offset_right = 46.0
+offset_bottom = 18.0
+color = Color(0.88, 0.68, 0.18, 1)
+
+[node name="HandleRightHole" type="ColorRect" parent="ColorRect/HandleRight"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 3.0
+offset_right = 6.0
+offset_bottom = 11.0
+color = Color(0.12, 0.14, 0.22, 0.6)
+
+[node name="HandleRightHighlight" type="ColorRect" parent="ColorRect/HandleRight"]
+layout_mode = 0
+offset_left = 6.0
+offset_right = 8.0
+offset_bottom = 14.0
+color = Color(1.0, 0.88, 0.35, 1)
+
+[node name="EyeLeft" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 10.0
+offset_right = 13.0
+offset_bottom = 18.0
+color = Color(0.1, 0.12, 0.18, 1)
+
+[node name="EyeSparkleLeft" type="ColorRect" parent="ColorRect/EyeLeft"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 3.0
+offset_bottom = 3.0
+color = Color(1, 1, 1, 0.9)
+
+[node name="EyeRight" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 10.0
+offset_right = 29.0
+offset_bottom = 18.0
+color = Color(0.1, 0.12, 0.18, 1)
+
+[node name="EyeSparkleRight" type="ColorRect" parent="ColorRect/EyeRight"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 3.0
+offset_bottom = 3.0
+color = Color(1, 1, 1, 0.9)
+
+[node name="SmileMouth" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 19.0
+offset_right = 23.0
+offset_bottom = 22.0
+color = Color(0.1, 0.12, 0.18, 1)
+
+[node name="BlushLeft" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 16.0
+offset_right = 8.0
+offset_bottom = 19.0
+color = Color(0.98, 0.4, 0.52, 0.85)
+
+[node name="BlushRight" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 16.0
+offset_right = 34.0
+offset_bottom = 19.0
+color = Color(0.98, 0.4, 0.52, 0.85)
+
+[node name="LegLeft" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 28.0
+offset_right = 13.0
+offset_bottom = 44.0
+color = Color(0.95, 0.78, 0.22, 1)
+
+[node name="BootLeft" type="ColorRect" parent="ColorRect/LegLeft"]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 16.0
+color = Color(0.38, 0.24, 0.15, 1)
+
+[node name="BootCuffLeft" type="ColorRect" parent="ColorRect/LegLeft/BootLeft"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = 7.0
+offset_bottom = 1.0
+color = Color(0.52, 0.35, 0.22, 1)
+
+[node name="LegRight" type="ColorRect" parent="ColorRect"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 28.0
+offset_right = 31.0
+offset_bottom = 44.0
+color = Color(0.95, 0.78, 0.22, 1)
+
+[node name="BootRight" type="ColorRect" parent="ColorRect/LegRight"]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 16.0
+color = Color(0.38, 0.24, 0.15, 1)
+
+[node name="BootCuffRight" type="ColorRect" parent="ColorRect/LegRight/BootRight"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = 7.0
+offset_bottom = 1.0
+color = Color(0.52, 0.35, 0.22, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(16, 32)
-scale = Vector2(0.075, 0.075)
+visible = false
+position = Vector2(19, 26)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(19, 26)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(16, 32)
+position = Vector2(19, 26)
 shape = SubResource("RectangleShape2D_body")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(16, 32)
+position = Vector2(19, 26)
 limit_left = 0
 limit_top = -400
 limit_right = 6400
@@ -40,10 +254,37 @@ collision_mask = 16
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sword"]
-position = Vector2(46, 26)
+position = Vector2(50, 20)
 shape = SubResource("RectangleShape2D_sword")
 
 [node name="ColorRect" type="ColorRect" parent="Sword"]
 visible = false
 mouse_filter = 2
-color = Color(1, 1, 0.4, 0.85)
+color = Color(0.88, 0.92, 0.98, 0.95)
+
+[node name="BladeHighlight" type="ColorRect" parent="Sword/ColorRect"]
+layout_mode = 0
+offset_top = 2.0
+offset_right = 4.0
+offset_bottom = 42.0
+color = Color(1, 1, 0.9, 0.98)
+
+[node name="Crossguard" type="ColorRect" parent="Sword/ColorRect"]
+layout_mode = 0
+offset_left = -6.0
+offset_top = 34.0
+offset_right = 10.0
+offset_bottom = 40.0
+color = Color(1.0, 0.82, 0.2, 1)
+
+[node name="PommelGem" type="ColorRect" parent="Sword/ColorRect/Crossguard"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = 10.0
+offset_bottom = 12.0
+color = Color(0.95, 0.15, 0.28, 1)
+
+[node name="SlashArc" type="Polygon2D" parent="Sword/ColorRect"]
+color = Color(0.15, 0.98, 0.35, 0.95)
+polygon = PackedVector2Array(0, -22, 26, -30, 52, -14, 60, 16, 48, 46, 22, 56, 30, 34, 40, 14, 32, -8, 14, -16)

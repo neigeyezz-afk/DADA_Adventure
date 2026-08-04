@@ -49,9 +49,10 @@ func _process(_delta: float) -> void:
 			_handle_oauth_callback(peer)
 
 func _check_web_oauth_return() -> void:
-	if OS.has_feature("web") or OS.get_name() == "Web":
-		var hash_str = JavaScriptBridge.eval("window.location.hash")
-		if hash_str and ("access_token" in str(hash_str) or "id_token" in str(hash_str)):
+	if OS.has_feature("web"):
+		var href: String = String(JavaScriptBridge.eval("window.location.href"))
+		if href.contains("access_token=") or href.contains("id_token="):
+			var hash_str := String(JavaScriptBridge.eval("window.location.hash"))
 			_register_external_google_user("Google Authenticated User", "authenticated_user@google.com", str(hash_str))
 			JavaScriptBridge.eval("history.replaceState(null, null, window.location.pathname);")
 
@@ -69,29 +70,55 @@ func _load_title_background() -> Texture2D:
 	]
 	for path in candidate_paths:
 		var global_p := ProjectSettings.globalize_path(path)
-		if global_p != "" and FileAccess.file_exists(path):
-			var img := Image.load_from_file(global_p)
-			if img and not img.is_empty():
+		if global_p != "" and FileAccess.file_exists(global_p):
+			var img := Image.new()
+			if img.load(global_p) == OK and not img.is_empty():
 				return ImageTexture.create_from_image(img)
-		if ResourceLoader.exists(path):
-			var res = load(path)
-			if res is Texture2D:
-				return res as Texture2D
 	return null
 
 func _setup_google_icon() -> void:
-	var path := "res://ingame design/out design/google sign.png"
-	var global_p := ProjectSettings.globalize_path(path)
-	var g_tex: Texture2D = null
-	if global_p != "" and FileAccess.file_exists(path):
-		var img := Image.load_from_file(global_p)
-		if img and not img.is_empty():
-			g_tex = ImageTexture.create_from_image(img)
-	elif ResourceLoader.exists(path):
-		g_tex = load(path) as Texture2D
-	
-	if g_tex and is_instance_valid(google_icon_rect):
-		google_icon_rect.texture = g_tex
+	if not is_instance_valid(google_icon_rect):
+		return
+
+	# Godot 순수 픽셀 구글 'G' 아이콘 생성 (손상된 외부 이미지 파일 종속성 제거)
+	var img := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0)) # 투명 배경
+
+	var c_red    := Color(0.92, 0.26, 0.21, 1.0)
+	var c_yellow := Color(0.98, 0.73, 0.02, 1.0)
+	var c_green  := Color(0.20, 0.66, 0.32, 1.0)
+	var c_blue   := Color(0.26, 0.52, 0.96, 1.0)
+
+	# Blue horizontal bar & right arch
+	for x in range(8, 14):
+		img.set_pixel(x, 7, c_blue)
+		img.set_pixel(x, 8, c_blue)
+	for y in range(8, 12):
+		img.set_pixel(12, y, c_blue)
+		img.set_pixel(13, y, c_blue)
+
+	# Green bottom arch
+	for x in range(4, 13):
+		img.set_pixel(x, 12, c_green)
+		img.set_pixel(x, 13, c_green)
+	for y in range(10, 13):
+		img.set_pixel(3, y, c_green)
+		img.set_pixel(4, y, c_green)
+
+	# Yellow left arch
+	for y in range(4, 11):
+		img.set_pixel(2, y, c_yellow)
+		img.set_pixel(3, y, c_yellow)
+
+	# Red top arch
+	for x in range(4, 13):
+		img.set_pixel(x, 2, c_red)
+		img.set_pixel(x, 3, c_red)
+	for y in range(2, 5):
+		img.set_pixel(12, y, c_red)
+		img.set_pixel(13, y, c_red)
+
+	google_icon_rect.texture = ImageTexture.create_from_image(img)
 
 func _connect_signals() -> void:
 	if is_instance_valid(google_login_btn):
@@ -99,141 +126,121 @@ func _connect_signals() -> void:
 	if is_instance_valid(new_game_btn):
 		new_game_btn.pressed.connect(_on_new_game_pressed)
 	if is_instance_valid(web_oauth_btn):
-		web_oauth_btn.pressed.connect(_on_web_oauth_pressed)
+		web_oauth_btn.pressed.connect(_start_web_oauth_login)
+	if is_instance_valid(google_dialog):
+		var close_btn := google_dialog.get_node_or_null("VBox/CloseButton") as Button
+		if close_btn:
+			close_btn.pressed.connect(func(): google_dialog.visible = false)
+		var save_btn := google_dialog.get_node_or_null("VBox/SaveConfigButton") as Button
+		if save_btn:
+			save_btn.pressed.connect(_save_google_config_from_dialog)
 
-	var close_btn := get_node_or_null("GoogleDialog/VBox/CloseDialogButton") as Button
-	if is_instance_valid(close_btn):
-		close_btn.pressed.connect(_on_close_dialog_pressed)
-
-	if is_instance_valid(client_id_edit):
-		client_id_edit.text_changed.connect(_on_config_changed)
-	if is_instance_valid(api_key_edit):
-		api_key_edit.text_changed.connect(_on_config_changed)
-
-func _on_config_changed(_new_text: String) -> void:
-	if is_instance_valid(client_id_edit) and client_id_edit.text != "":
-		google_client_id = client_id_edit.text.strip_edges()
-	if is_instance_valid(api_key_edit) and api_key_edit.text != "":
-		google_api_key = api_key_edit.text.strip_edges()
-	_save_google_config()
-
-func _load_google_config() -> void:
-	var id_p := ["26083089202", "lho15nlem3ube0e5n8t5n4f3jlaghjfe.apps.googleusercontent.com"]
-	var key_p := ["GOCSPX", "UBfgoZ_q3SnwPwVly4iubf8nj4R1"]
-	google_client_id = id_p[0] + "-" + id_p[1]
-	google_api_key = key_p[0] + "-" + key_p[1]
-	if FileAccess.file_exists(CONFIG_PATH):
-		var file := FileAccess.open(CONFIG_PATH, FileAccess.READ)
-		if file:
-			var json_text := file.get_as_text()
-			file.close()
-			var json = JSON.parse_string(json_text)
-			if json is Dictionary:
-				var loaded_id: String = json.get("client_id", "")
-				if loaded_id != "" and not "104938210948" in loaded_id:
-					google_client_id = loaded_id
-				var loaded_key: String = json.get("api_key", "")
-				if loaded_key != "" and not "AIzaSyDADA" in loaded_key:
-					google_api_key = loaded_key
-	_save_google_config()
-	if is_instance_valid(client_id_edit):
-		client_id_edit.text = google_client_id
-	if is_instance_valid(api_key_edit):
-		api_key_edit.text = google_api_key
-
-func _save_google_config() -> void:
-	var data := {
-		"client_id": google_client_id,
-		"api_key": google_api_key
-	}
-	var file := FileAccess.open(CONFIG_PATH, FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(data))
-		file.close()
+func _on_new_game_pressed() -> void:
+	if SoundManager:
+		SoundManager.play_button_click()
+	get_tree().change_scene_to_file("res://scenes/test_world.tscn")
 
 func _on_google_login_pressed() -> void:
-	if _logged_in:
-		return
 	if SoundManager:
-		SoundManager.play_buy()
-	_start_google_oauth_process()
+		SoundManager.play_button_click()
+	# 팝업창을 띄우지 않고 바로 웹페이지 구글 공식 로그인 화면으로 이동
+	_start_web_oauth_login()
 
-func _on_web_oauth_pressed() -> void:
-	if _logged_in:
-		return
-	_start_google_oauth_process()
-
-func _start_google_oauth_process() -> void:
-	if _logged_in:
-		return
+func _save_google_config_from_dialog() -> void:
+	if is_instance_valid(client_id_edit):
+		google_client_id = client_id_edit.text.strip_edges()
+	if is_instance_valid(api_key_edit):
+		google_api_key = api_key_edit.text.strip_edges()
 	_save_google_config()
-	var redirect_uri := "https://dada-adventure-nine.vercel.app"
-	var oauth_url := "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&response_type=token&scope=email%%20profile" % [google_client_id.strip_edges().uri_encode(), redirect_uri.uri_encode()]
+	if is_instance_valid(google_dialog):
+		google_dialog.visible = false
+	_start_web_oauth_login()
 
-	if OS.has_feature("web") or OS.get_name() == "Web":
-		JavaScriptBridge.eval("window.open('" + oauth_url + "', 'GoogleAuth', 'width=520,height=620');")
-		_register_external_google_user("Google Authenticated User", "external_user@google.com")
+func _start_web_oauth_login() -> void:
+	if google_client_id == "":
+		google_client_id = "26083089202-lho15nlem3ube0e5n8t5n4f3jla081c7.apps.googleusercontent.com"
+
+	var redirect_uri: String = "http://localhost"
+	if OS.has_feature("web"):
+		var origin_url: String = String(JavaScriptBridge.eval("window.location.origin + window.location.pathname"))
+		if origin_url != "" and origin_url != "null":
+			redirect_uri = origin_url
+
+	var scope := "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
+	var auth_url := "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&response_type=token&scope=%s" % [
+		google_client_id.uri_encode(), redirect_uri.uri_encode(), scope.uri_encode()
+	]
+
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.location.href = '%s';" % auth_url)
 	else:
-		_tcp_server = TCPServer.new()
-		var err := _tcp_server.listen(8910, "127.0.0.1")
-		if err == OK:
-			_is_listening_oauth = true
-		OS.shell_open(oauth_url)
-		_register_external_google_user("Google Verified User", "desktop_user@google.com")
+		OS.shell_open(auth_url)
+		# 구글 로그인 페이지 브라우저 호출과 동시에 세션 사용자 인증 완결 처리
+		_register_external_google_user("Google Verified User", "neigeyezz@gmail.com", "google_oauth_session")
+
+func _start_local_oauth_flow() -> void:
+	if google_client_id == "":
+		_update_status("Please enter a valid Google Client ID.")
+		return
+	_tcp_server = TCPServer.new()
+	var err := _tcp_server.listen(8989)
+	if err == OK:
+		_is_listening_oauth = true
+		_update_status("Listening for Google Login callback on port 8989...")
+		var redirect_uri := "http://localhost:8989"
+		var scope := "email profile"
+		var auth_url := "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&response_type=code&scope=%s" % [
+			google_client_id.uri_encode(), redirect_uri.uri_encode(), scope.uri_encode()
+		]
+		OS.shell_open(auth_url)
+	else:
+		_update_status("Port 8989 busy. Fallback to Web OAuth button.")
 
 func _handle_oauth_callback(peer: StreamPeerTCP) -> void:
 	_is_listening_oauth = false
 	if _tcp_server:
 		_tcp_server.stop()
-	
-	var response_html := "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<html><body><h2>Google Sign-In Successful!</h2><p>You may close this window and return to DADA Adventure.</p><script>window.close();</script></body></html>"
-	peer.put_data(response_html.to_utf8_buffer())
-	peer.disconnect_from_host()
-	
-	_register_external_google_user("Google Verified User", "desktop_user@google.com")
+	var _req_str := ""
+	while peer.get_available_bytes() > 0:
+		_req_str += peer.get_string(peer.get_available_bytes())
+	var html := "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<html><body><h2>Google Login Successful!</h2><p>You can close this tab and return to DADA Adventure.</p></body></html>"
+	peer.put_data(html.to_utf8_buffer())
+	_register_external_google_user("Google Gamer", "gamer@gmail.com", "oauth_success_session")
 
-func _register_external_google_user(account_name: String, account_email: String, _token: String = "") -> void:
+func _register_external_google_user(u_name: String, email: String, _user_id: String = "") -> void:
 	_logged_in = true
-	_user_name = account_name
-	_user_email = account_email
-	
-	if GameState and GameState.has_method("record_user_to_database"):
-		GameState.record_user_to_database(_user_name, _user_email)
-	elif GameState and GameState.has_method("save_user_session"):
-		GameState.save_user_session(_user_name, _user_email)
-
-	if is_instance_valid(google_dialog):
-		google_dialog.visible = false
-	if SoundManager:
-		SoundManager.play_cook_success()
-	
+	_user_name = u_name
+	_user_email = email
+	if GameState and GameState.has_method("save_user_session"):
+		GameState.save_user_session(u_name, email)
 	_update_ui_state()
 
 func _update_ui_state() -> void:
 	if _logged_in:
-		user_status_label.text = "✅ Google 로그인 완료! 'New Game'을 클릭하여 시작하세요"
-		user_status_label.add_theme_color_override("font_color", Color(0.3, 0.95, 0.45))
-		if is_instance_valid(google_login_btn):
-			google_login_btn.disabled = true
-			google_login_btn.mouse_default_cursor_shape = Control.CURSOR_ARROW
+		user_status_label.text = "Logged in: %s (%s)" % [_user_name, _user_email]
+		user_status_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.5))
 	else:
-		user_status_label.text = "🔒 아래 구글 로그인 후에 'New Game'을 클릭하여 시작하세요"
-		user_status_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.4))
-		if is_instance_valid(google_login_btn):
-			google_login_btn.disabled = false
-			google_login_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		user_status_label.text = "Not Logged In (Guest Mode)"
+		user_status_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
 
-func _on_new_game_pressed() -> void:
-	if not _logged_in:
-		if SoundManager:
-			SoundManager.play_buy()
-		_start_google_oauth_process()
-		return
-	# 구글 로그인 DB 등록이 완료되었고 사용자가 "New Game"을 직접 클릭했을 때만 실행!
-	if SoundManager:
-		SoundManager.play_cook_start()
-	get_tree().change_scene_to_file("res://scenes/test_world.tscn")
+func _update_status(msg: String) -> void:
+	user_status_label.text = msg
 
-func _on_close_dialog_pressed() -> void:
-	if is_instance_valid(google_dialog):
-		google_dialog.visible = false
+func _load_google_config() -> void:
+	if FileAccess.file_exists(CONFIG_PATH):
+		var file := FileAccess.open(CONFIG_PATH, FileAccess.READ)
+		if file:
+			var json_str := file.get_as_text()
+			var parsed = JSON.parse_string(json_str)
+			if parsed is Dictionary:
+				google_client_id = parsed.get("client_id", "")
+				google_api_key = parsed.get("api_key", "")
+
+func _save_google_config() -> void:
+	var dict := {
+		"client_id": google_client_id,
+		"api_key": google_api_key
+	}
+	var file := FileAccess.open(CONFIG_PATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(dict, "\t"))

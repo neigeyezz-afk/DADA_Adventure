@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://bxg5240h1227w"]
 
-[ext_resource type="Script" path="res://scripts/title_screen.gd" id="1_title"]
+[ext_resource type="Script" uid="uid://d15fga7o67g03" path="res://scripts/title_screen.gd" id="1_title"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_google"]
 bg_color = Color(0.96, 0.96, 0.98, 0.92)
@@ -16,7 +16,7 @@ corner_radius_bottom_left = 8
 shadow_color = Color(0, 0, 0, 0.25)
 shadow_size = 4
 
-[node name="TitleScreen" type="Control"]
+[node name="TitleScreen" type="Control" unique_id=943278908]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,7 +25,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_title")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=169253956]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,7 +35,7 @@ grow_vertical = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="UIContainer" type="VBoxContainer" parent="."]
+[node name="UIContainer" type="VBoxContainer" parent="." unique_id=1159992263]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -50,7 +50,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 10
 
-[node name="UserStatusLabel" type="Label" parent="UIContainer"]
+[node name="UserStatusLabel" type="Label" parent="UIContainer" unique_id=662625086]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -59,15 +59,15 @@ theme_override_font_sizes/font_size = 16
 text = "🔒 아래 구글 로그인 후에 'New Game'을 클릭하여 시작하세요"
 horizontal_alignment = 1
 
-[node name="GoogleLoginButton" type="Button" parent="UIContainer"]
+[node name="GoogleLoginButton" type="Button" parent="UIContainer" unique_id=1995773665]
 custom_minimum_size = Vector2(340, 52)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_google")
-theme_override_styles/hover = SubResource("StyleBoxFlat_google")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_google")
+theme_override_styles/hover = SubResource("StyleBoxFlat_google")
 
-[node name="HBox" type="HBoxContainer" parent="UIContainer/GoogleLoginButton"]
+[node name="HBox" type="HBoxContainer" parent="UIContainer/GoogleLoginButton" unique_id=519399894]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -77,10 +77,10 @@ offset_right = -12.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-alignment = 1
 theme_override_constants/separation = 12
+alignment = 1
 
-[node name="GoogleIcon" type="TextureRect" parent="UIContainer/GoogleLoginButton/HBox"]
+[node name="GoogleIcon" type="TextureRect" parent="UIContainer/GoogleLoginButton/HBox" unique_id=624589941]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
@@ -88,14 +88,14 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="UIContainer/GoogleLoginButton/HBox"]
+[node name="Label" type="Label" parent="UIContainer/GoogleLoginButton/HBox" unique_id=114804175]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.15, 0.15, 0.18, 1)
 theme_override_font_sizes/font_size = 18
 text = "Sign in with Google"
 vertical_alignment = 1
 
-[node name="NewGameButton" type="Button" parent="."]
+[node name="NewGameButton" type="Button" parent="." unique_id=914214306]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 1
 anchors_preset = 2
@@ -109,7 +109,7 @@ grow_vertical = 0
 mouse_default_cursor_shape = 2
 flat = true
 
-[node name="GoogleDialog" type="Panel" parent="."]
+[node name="GoogleDialog" type="Panel" parent="." unique_id=1120298535]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -124,7 +124,7 @@ offset_bottom = 190.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="GoogleDialog"]
+[node name="VBox" type="VBoxContainer" parent="GoogleDialog" unique_id=443359180]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -137,42 +137,42 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="DialogTitle" type="Label" parent="GoogleDialog/VBox"]
+[node name="DialogTitle" type="Label" parent="GoogleDialog/VBox" unique_id=1486857239]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "🔑 Google OAuth 2.0 / API Key 설정"
 horizontal_alignment = 1
 
-[node name="ConfigBox" type="VBoxContainer" parent="GoogleDialog/VBox"]
+[node name="ConfigBox" type="VBoxContainer" parent="GoogleDialog/VBox" unique_id=1114217062]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="ClientIdLabel" type="Label" parent="GoogleDialog/VBox/ConfigBox"]
+[node name="ClientIdLabel" type="Label" parent="GoogleDialog/VBox/ConfigBox" unique_id=821774361]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Google OAuth Client ID:"
 
-[node name="ClientIdEdit" type="LineEdit" parent="GoogleDialog/VBox/ConfigBox"]
+[node name="ClientIdEdit" type="LineEdit" parent="GoogleDialog/VBox/ConfigBox" unique_id=1615923017]
 layout_mode = 2
 placeholder_text = "CLIENT_ID.apps.googleusercontent.com"
 
-[node name="ApiKeyLabel" type="Label" parent="GoogleDialog/VBox/ConfigBox"]
+[node name="ApiKeyLabel" type="Label" parent="GoogleDialog/VBox/ConfigBox" unique_id=874703722]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Google Cloud API Key:"
 
-[node name="ApiKeyEdit" type="LineEdit" parent="GoogleDialog/VBox/ConfigBox"]
+[node name="ApiKeyEdit" type="LineEdit" parent="GoogleDialog/VBox/ConfigBox" unique_id=1806071488]
 layout_mode = 2
 placeholder_text = "AIzaSy..."
 
-[node name="WebOAuthButton" type="Button" parent="GoogleDialog/VBox"]
+[node name="WebOAuthButton" type="Button" parent="GoogleDialog/VBox" unique_id=580550331]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.95, 0.45, 1)
 theme_override_font_sizes/font_size = 15
 text = "🌐 웹 브라우저에서 공식 구글 계정 로그인"
 
-[node name="CloseDialogButton" type="Button" parent="GoogleDialog/VBox"]
+[node name="CloseDialogButton" type="Button" parent="GoogleDialog/VBox" unique_id=675462110]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 text = "닫기 (Cancel)"

@@ -55,6 +55,11 @@ func play_buy() -> void: play_sound("buy")
 func play_cook_start() -> void: play_sound("cook_start")
 func play_cook_success() -> void: play_sound("cook_success")
 func play_chest_open() -> void: play_sound("chest_open")
+func play_sword_swing() -> void: play_sound("attack")
+func play_shield_block() -> void: play_sound("hit")
+func play_player_hurt() -> void: play_sound("hit")
+func play_player_die() -> void: play_sound("hit")
+func play_button_click() -> void: play_sound("buy")
 
 func _generate_sfx(sfx_type: String) -> AudioStreamWAV:
 	var mix_rate: int = 22050

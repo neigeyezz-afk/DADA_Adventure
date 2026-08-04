@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://c6golem123"]
 
-[ext_resource type="Script" path="res://scripts/golem.gd" id="1_golem"]
-[ext_resource type="Script" path="res://scripts/hurtbox.gd" id="2_hurt"]
+[ext_resource type="Script" uid="uid://cr1wfvltm7ywi" path="res://scripts/golem.gd" id="1_golem"]
+[ext_resource type="Script" uid="uid://c20bxkkpppjlx" path="res://scripts/hurtbox.gd" id="2_hurt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_golem"]
 size = Vector2(40, 48)
@@ -15,46 +15,40 @@ size = Vector2(42, 50)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_touch"]
 size = Vector2(44, 52)
 
-[node name="Golem" type="CharacterBody2D"]
+[node name="Golem" type="CharacterBody2D" unique_id=445607809]
 collision_layer = 4
-collision_mask = 1
 script = ExtResource("1_golem")
+max_health = 4
+touch_damage = 0
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -20.0
-offset_top = -24.0
-offset_right = 20.0
-offset_bottom = 24.0
-color = Color(0.85, 0.7, 0.45, 1)
+[node name="VisualRoot" type="Node2D" parent="." unique_id=1488899944]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=963701625]
 shape = SubResource("RectangleShape2D_golem")
 
-[node name="LedgeCheck" type="RayCast2D" parent="."]
+[node name="LedgeCheck" type="RayCast2D" parent="." unique_id=26184354]
 position = Vector2(-20, 0)
 target_position = Vector2(0, 30)
-collision_mask = 1
 
-[node name="DetectionZone" type="Area2D" parent="."]
+[node name="DetectionZone" type="Area2D" parent="." unique_id=446302226]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionZone" unique_id=1535973736]
 shape = SubResource("CircleShape2D_det")
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1478910434]
 collision_layer = 16
 collision_mask = 0
 monitoring = false
-monitorable = true
 script = ExtResource("2_hurt")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=2023068454]
 shape = SubResource("RectangleShape2D_hurt")
 
-[node name="TouchDamage" type="Area2D" parent="."]
+[node name="TouchDamage" type="Area2D" parent="." unique_id=1013424724]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TouchDamage"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TouchDamage" unique_id=744541715]
 shape = SubResource("RectangleShape2D_touch")

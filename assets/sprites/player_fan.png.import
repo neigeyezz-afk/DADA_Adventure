@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://playerfan0000000000001"
-valid=false
+uid="uid://bcxo05pue2feu"
+path="res://.godot/imported/player_fan.png-5be6666e2288ea4d1eb9ddd137c6a893.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://assets/sprites/player_fan.png"
+dest_files=["res://.godot/imported/player_fan.png-5be6666e2288ea4d1eb9ddd137c6a893.ctex"]
 
 [params]
 

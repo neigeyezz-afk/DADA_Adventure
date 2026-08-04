@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c6rock123"]
+
+[ext_resource type="Script" uid="uid://cxnagrkm8q87" path="res://scripts/rock.gd" id="1_rock"]
+
+[node name="Rock" type="Node2D" unique_id=1494560009]
+position = Vector2(3, 0)
+script = ExtResource("1_rock")
+
+[node name="VisualRoot" type="Node2D" parent="." unique_id=1357659319]

@@ -1,31 +1,123 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=7 format=3 uid="uid://c6kingslime123"]
 
 [ext_resource type="Script" path="res://scripts/king_slime.gd" id="1_king"]
 [ext_resource type="Script" path="res://scripts/hurtbox.gd" id="2_hurt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_king"]
-size = Vector2(80, 80)
+size = Vector2(64, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_det"]
-radius = 320.0
+radius = 280.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
-size = Vector2(84, 84)
+size = Vector2(68, 68)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_touch"]
-size = Vector2(88, 88)
+size = Vector2(70, 70)
 
 [node name="KingSlime" type="CharacterBody2D"]
 collision_layer = 4
 collision_mask = 1
 script = ExtResource("1_king")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="VisualPivot" type="Node2D" parent="."]
+position = Vector2(0, 32)
+scale = Vector2(0.8, 0.8)
+
+[node name="BodyOutline" type="ColorRect" parent="VisualPivot"]
+offset_left = -43.0
+offset_top = -83.0
+offset_right = 43.0
+offset_bottom = 3.0
+color = Color(0.08, 0.12, 0.2, 1)
+
+[node name="BodyRect" type="ColorRect" parent="VisualPivot"]
 offset_left = -40.0
-offset_top = -40.0
+offset_top = -80.0
 offset_right = 40.0
-offset_bottom = 40.0
-color = Color(0.9, 0.2, 0.3, 1)
+color = Color(0.15, 0.48, 0.92, 1)
+
+[node name="BottomRim" type="ColorRect" parent="VisualPivot/BodyRect"]
+layout_mode = 0
+offset_top = 68.0
+offset_right = 80.0
+offset_bottom = 80.0
+color = Color(0.1, 0.32, 0.72, 1)
+
+[node name="ShineBlock" type="ColorRect" parent="VisualPivot/BodyRect"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 10.0
+offset_right = 68.0
+offset_bottom = 30.0
+color = Color(1.0, 1.0, 1.0, 0.75)
+
+[node name="EyeLeft" type="ColorRect" parent="VisualPivot/BodyRect"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 38.0
+offset_right = 26.0
+offset_bottom = 56.0
+color = Color(0.08, 0.1, 0.15, 1)
+
+[node name="EyeRight" type="ColorRect" parent="VisualPivot/BodyRect"]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 38.0
+offset_right = 62.0
+offset_bottom = 56.0
+color = Color(0.08, 0.1, 0.15, 1)
+
+[node name="BlushLeft" type="ColorRect" parent="VisualPivot/BodyRect"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 54.0
+offset_right = 18.0
+offset_bottom = 62.0
+color = Color(0.95, 0.25, 0.35, 0.9)
+
+[node name="BlushRight" type="ColorRect" parent="VisualPivot/BodyRect"]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 54.0
+offset_right = 72.0
+offset_bottom = 62.0
+color = Color(0.95, 0.25, 0.35, 0.9)
+
+[node name="GoldenCrown" type="ColorRect" parent="VisualPivot/BodyRect"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = -24.0
+offset_right = 68.0
+color = Color(0.98, 0.82, 0.18, 1)
+
+[node name="CrownPeakLeft" type="ColorRect" parent="VisualPivot/BodyRect/GoldenCrown"]
+layout_mode = 0
+offset_top = -12.0
+offset_right = 14.0
+color = Color(0.98, 0.82, 0.18, 1)
+
+[node name="CrownPeakCenter" type="ColorRect" parent="VisualPivot/BodyRect/GoldenCrown"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = -18.0
+offset_right = 36.0
+color = Color(1.0, 0.88, 0.28, 1)
+
+[node name="CrownPeakRight" type="ColorRect" parent="VisualPivot/BodyRect/GoldenCrown"]
+layout_mode = 0
+offset_left = 42.0
+offset_top = -12.0
+offset_right = 56.0
+color = Color(0.98, 0.82, 0.18, 1)
+
+[node name="RubyGem" type="ColorRect" parent="VisualPivot/BodyRect/GoldenCrown"]
+layout_mode = 0
+offset_left = 23.0
+offset_top = -10.0
+offset_right = 33.0
+offset_bottom = 2.0
+color = Color(0.95, 0.15, 0.28, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_king")

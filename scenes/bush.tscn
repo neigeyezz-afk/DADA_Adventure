@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ds7gj0jumtn32"]
+
+[ext_resource type="Script" uid="uid://chr1o2ek7cdue" path="res://scripts/bush.gd" id="1_bush"]
+
+[node name="Bush" type="Node2D" unique_id=1050323470]
+z_index = 15
+script = ExtResource("1_bush")
+
+[node name="VisualRoot" type="Node2D" parent="." unique_id=916994360]

@@ -3,9 +3,11 @@
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
 
 [node name="HUD" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_hud")
 
 [node name="Top" type="Control" parent="."]
+process_mode = 1
 anchor_right = 1.0
 offset_bottom = 140.0
 mouse_filter = 2
@@ -41,172 +43,311 @@ text = "Weapon  Old Shortsword"
 [node name="RecipeBookButton" type="Button" parent="Top"]
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -160.0
+offset_left = -170.0
 offset_top = 12.0
 offset_right = -16.0
-offset_bottom = 44.0
-text = "📖 Recipe Book"
+offset_bottom = 46.0
 
-[node name="TimerScreen" type="ColorRect" parent="."]
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -60.0
-offset_top = 8.0
-offset_right = 60.0
-offset_bottom = 48.0
-color = Color(0.05, 0.08, 0.06, 1)
+[node name="RecipeLabel" type="RichTextLabel" parent="Top/RecipeBookButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+mouse_filter = 2
+bbcode_enabled = true
+text = "[center]📖 [color=#ffe033]R[/color]ecipe Book[/center]"
+
+[node name="ObjectiveLabel" type="Label" parent="Top"]
+offset_left = 16.0
+offset_top = 110.0
+offset_right = 500.0
+offset_bottom = 132.0
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+text = "🎯 Objective: Collect materials & cook Basic Ramen!"
 
 [node name="TimerLabel" type="Label" parent="."]
+process_mode = 1
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -80.0
+offset_left = -120.0
 offset_top = 10.0
-offset_right = 80.0
-offset_bottom = 46.0
-theme_override_font_sizes/font_size = 30
+offset_right = 120.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 46
 theme_override_colors/font_color = Color(0.25, 1, 0.45, 1)
-theme_override_constants/outline_size = 0
+theme_override_constants/outline_size = 3
+theme_override_colors/font_outline_color = Color(0.05, 0.12, 0.06, 1)
 horizontal_alignment = 1
 text = "1:30"
 
-[node name="ShopPanel" type="Panel" parent="."]
+[node name="StageBannerPanel" type="Panel" parent="."]
+process_mode = 1
+anchor_left = 0.5
+anchor_top = 0.25
+anchor_right = 0.5
+anchor_bottom = 0.25
+offset_left = -280.0
+offset_top = -40.0
+offset_right = 280.0
+offset_bottom = 40.0
+self_modulate = Color(0.1, 0.12, 0.18, 0.9)
+
+[node name="TitleLabel" type="Label" parent="StageBannerPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(1.0, 0.88, 0.4, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "STAGE 1: 슬라임 초원"
+
+[node name="StageClearPanel" type="Panel" parent="."]
+process_mode = 1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -230.0
-offset_top = -190.0
-offset_right = 230.0
-offset_bottom = 190.0
-self_modulate = Color(0.12, 0.16, 0.24, 0.95)
+offset_left = -200.0
+offset_top = -80.0
+offset_right = 200.0
+offset_bottom = 80.0
+visible = false
+
+[node name="Label" type="Label" parent="StageClearPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.4, 1, 0.5, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "🎉 STAGE CLEARED!"
+
+[node name="GameOverPanel" type="ColorRect" parent="."]
+process_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+visible = false
+color = Color(0.2, 0, 0, 0.75)
+
+[node name="Title" type="Label" parent="GameOverPanel"]
+anchor_left = 0.5
+anchor_top = 0.35
+anchor_right = 0.5
+anchor_top = 0.35
+offset_left = -150.0
+offset_top = -30.0
+offset_right = 150.0
+offset_bottom = 30.0
+theme_override_font_sizes/font_size = 42
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+horizontal_alignment = 1
+text = "TIME OVER"
+
+[node name="Sub" type="Label" parent="GameOverPanel"]
+anchor_left = 0.5
+anchor_top = 0.55
+anchor_right = 0.5
+anchor_bottom = 0.55
+offset_left = -200.0
+offset_top = -15.0
+offset_right = 200.0
+offset_bottom = 15.0
+text = "Press New Game on Main Title to Retry!"
+horizontal_alignment = 1
+
+[node name="ShopPanel" type="Panel" parent="."]
+process_mode = 3
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -180.0
+offset_right = 260.0
+offset_bottom = 180.0
+visible = false
 
 [node name="Title" type="Label" parent="ShopPanel"]
-offset_left = 20.0
+anchor_right = 1.0
 offset_top = 12.0
-offset_right = 440.0
-offset_bottom = 40.0
-theme_override_font_sizes/font_size = 24
-theme_override_colors/font_color = Color(0.95, 0.88, 0.65, 1)
-text = "Tori's Shop & Campfire"
+offset_bottom = 38.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.88, 0.3, 1)
+horizontal_alignment = 1
+text = "📦 INVENTORY & CAMPFIRE COOKING 🍳"
 
 [node name="Info" type="Label" parent="ShopPanel"]
 offset_left = 20.0
-offset_top = 44.0
-offset_right = 440.0
+offset_top = 48.0
+offset_right = 500.0
 offset_bottom = 80.0
-theme_override_colors/font_color = Color(0.96, 0.96, 0.91, 1)
-text = "Gold 0   |   Materials 0"
+text = "Gold 0 | Materials 0/10"
+
+[node name="WeaponInfo" type="Label" parent="ShopPanel"]
+offset_left = 20.0
+offset_top = 84.0
+offset_right = 500.0
+offset_bottom = 106.0
+theme_override_colors/font_color = Color(0.8, 0.9, 1, 1)
+text = "Weapon: Old Shortsword | Pot: Brass Pot"
+
+[node name="RecipeInfo" type="Label" parent="ShopPanel"]
+offset_left = 20.0
+offset_top = 114.0
+offset_right = 500.0
+offset_bottom = 174.0
+theme_override_colors/font_color = Color(0.25, 1, 0.45, 1)
+text = "Next: Basic Ramen"
+autowrap_mode = 2
 
 [node name="SellButton" type="Button" parent="ShopPanel"]
 offset_left = 20.0
-offset_top = 84.0
-offset_right = 440.0
-offset_bottom = 120.0
-theme_override_font_sizes/font_size = 16
+offset_top = 184.0
+offset_right = 250.0
+offset_bottom = 224.0
 text = "Sell All Materials"
 
 [node name="BuyButton" type="Button" parent="ShopPanel"]
-offset_left = 20.0
-offset_top = 126.0
-offset_right = 440.0
-offset_bottom = 162.0
-theme_override_font_sizes/font_size = 16
+offset_left = 270.0
+offset_top = 184.0
+offset_right = 500.0
+offset_bottom = 224.0
 text = "Buy Next Weapon"
 
 [node name="UpgradePotButton" type="Button" parent="ShopPanel"]
 offset_left = 20.0
-offset_top = 168.0
-offset_right = 440.0
-offset_bottom = 204.0
-theme_override_font_sizes/font_size = 16
+offset_top = 236.0
+offset_right = 250.0
+offset_bottom = 276.0
 text = "Upgrade Pot"
 
-[node name="WeaponInfo" type="Label" parent="ShopPanel"]
-offset_left = 20.0
-offset_top = 210.0
-offset_right = 440.0
-offset_bottom = 232.0
-theme_override_colors/font_color = Color(0.86, 0.92, 1, 1)
-text = "Weapon: Old Shortsword"
-
-[node name="RecipeInfo" type="Label" parent="ShopPanel"]
-offset_left = 20.0
-offset_top = 236.0
-offset_right = 440.0
-offset_bottom = 284.0
-theme_override_colors/font_color = Color(0.25, 1, 0.45, 1)
-theme_override_font_sizes/font_size = 16
-text = "Ramen Cooked: 0"
-
 [node name="CookButton" type="Button" parent="ShopPanel"]
-offset_left = 20.0
-offset_top = 290.0
-offset_right = 440.0
-offset_bottom = 328.0
-theme_override_font_sizes/font_size = 16
-text = "Cook Basic Ramen"
+offset_left = 270.0
+offset_top = 236.0
+offset_right = 500.0
+offset_bottom = 276.0
+text = "Cook Ramen"
 
-[node name="CloseHint" type="Label" parent="ShopPanel"]
-offset_left = 20.0
-offset_top = 338.0
-offset_right = 440.0
-offset_bottom = 368.0
-text = "Press ↑ again or leave to close"
+[node name="CloseButton" type="Button" parent="ShopPanel"]
+offset_left = 180.0
+offset_top = 296.0
+offset_right = 340.0
+offset_bottom = 330.0
+text = "Close (Q)"
 
 [node name="RecipeBookPanel" type="Panel" parent="."]
-visible = false
+process_mode = 3
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -220.0
-offset_top = -170.0
+offset_top = -180.0
 offset_right = 220.0
-offset_bottom = 170.0
-self_modulate = Color(0.1, 0.14, 0.22, 0.96)
+offset_bottom = 180.0
+visible = false
 
 [node name="Title" type="Label" parent="RecipeBookPanel"]
-offset_left = 20.0
+anchor_right = 1.0
 offset_top = 12.0
-offset_right = 420.0
-offset_bottom = 40.0
-theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
-text = "📖 Ramen Recipe Book"
+offset_bottom = 38.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.88, 0.3, 1)
+horizontal_alignment = 1
+text = "📖 RECIPE BOOK (R)"
 
 [node name="Content" type="RichTextLabel" parent="RecipeBookPanel"]
 offset_left = 20.0
 offset_top = 48.0
 offset_right = 420.0
-offset_bottom = 280.0
+offset_bottom = 300.0
 bbcode_enabled = true
-text = "Loading recipes..."
+text = "[b]Recipe List:[/b]"
 
 [node name="CloseButton" type="Button" parent="RecipeBookPanel"]
-offset_left = 140.0
-offset_top = 290.0
-offset_right = 300.0
-offset_bottom = 324.0
-text = "Close"
+offset_left = 160.0
+offset_top = 312.0
+offset_right = 280.0
+offset_bottom = 346.0
+text = "Close (R)"
 
-[node name="GameOverPanel" type="ColorRect" parent="."]
+[node name="PauseOverlay" type="ColorRect" parent="."]
+process_mode = 3
 visible = false
-anchor_left = 0.0
-anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0, 0, 0, 0.75)
+color = Color(0, 0, 0, 0.55)
 
-[node name="GameOverLabel" type="Label" parent="GameOverPanel"]
+[node name="PauseCenter" type="Control" parent="PauseOverlay"]
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -70.0
-offset_right = 220.0
-offset_bottom = 70.0
-theme_override_font_sizes/font_size = 48
+
+[node name="PauseTitle" type="Label" parent="PauseOverlay/PauseCenter"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -90.0
+offset_right = 100.0
+offset_bottom = -55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
 horizontal_alignment = 1
-text = "GAME OVER\nTime's Up"
-theme_override_colors/font_color = Color(1, 0.25, 0.25, 1)
+text = "PAUSED"
+
+[node name="PauseIconPivot" type="Node2D" parent="PauseOverlay/PauseCenter"]
+
+[node name="BarLeftOut" type="ColorRect" parent="PauseOverlay/PauseCenter/PauseIconPivot"]
+offset_left = -26.0
+offset_top = -30.0
+offset_right = -6.0
+offset_bottom = 30.0
+color = Color(0.08, 0.12, 0.18, 1)
+
+[node name="BarLeft" type="ColorRect" parent="PauseOverlay/PauseCenter/PauseIconPivot"]
+offset_left = -24.0
+offset_top = -28.0
+offset_right = -8.0
+offset_bottom = 28.0
+color = Color(0.96, 0.96, 0.96, 1)
+
+[node name="BarRightOut" type="ColorRect" parent="PauseOverlay/PauseCenter/PauseIconPivot"]
+offset_left = 6.0
+offset_top = -30.0
+offset_right = 26.0
+offset_bottom = 30.0
+color = Color(0.08, 0.12, 0.18, 1)
+
+[node name="BarRight" type="ColorRect" parent="PauseOverlay/PauseCenter/PauseIconPivot"]
+offset_left = 8.0
+offset_top = -28.0
+offset_right = 24.0
+offset_bottom = 28.0
+color = Color(0.96, 0.96, 0.96, 1)
+
+[node name="PauseGuide" type="Label" parent="PauseOverlay/PauseCenter"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = 45.0
+offset_right = 150.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+horizontal_alignment = 1
+text = "Press [P] to Resume"

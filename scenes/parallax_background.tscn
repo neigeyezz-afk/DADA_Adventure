@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6parallaxbg123"]
+
+[ext_resource type="Script" path="res://scripts/parallax_background.gd" id="1_parallax"]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+script = ExtResource("1_parallax")
+
+[node name="SkyLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0, 0)
+
+[node name="SkyGradient" type="ColorRect" parent="SkyLayer"]
+custom_minimum_size = Vector2(1920, 1080)
+offset_left = -500.0
+offset_top = -800.0
+offset_right = 9000.0
+offset_bottom = 1200.0
+color = Color(0.25, 0.58, 0.88, 1)
+
+[node name="HorizonLight" type="ColorRect" parent="SkyLayer"]
+offset_left = -500.0
+offset_top = 100.0
+offset_right = 9000.0
+offset_bottom = 500.0
+color = Color(0.65, 0.88, 0.98, 0.4)
+
+[node name="CloudsLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.08, 0.02)
+motion_mirroring = Vector2(2400, 0)
+
+[node name="Cloud1" type="Polygon2D" parent="CloudsLayer"]
+color = Color(1, 1, 1, 0.85)
+polygon = PackedVector2Array(100, 50, 160, 20, 260, 20, 320, 50, 380, 40, 440, 70, 460, 110, 80, 110)
+
+[node name="Cloud1Shadow" type="Polygon2D" parent="CloudsLayer/Cloud1"]
+color = Color(0.82, 0.9, 0.98, 0.85)
+polygon = PackedVector2Array(80, 110, 460, 110, 440, 130, 100, 130)
+
+[node name="Cloud2" type="Polygon2D" parent="CloudsLayer"]
+color = Color(1, 1, 1, 0.85)
+polygon = PackedVector2Array(750, 20, 820, -10, 940, -10, 1010, 20, 1080, 10, 1150, 40, 1170, 80, 720, 80)
+
+[node name="Cloud3" type="Polygon2D" parent="CloudsLayer"]
+color = Color(1, 1, 1, 0.85)
+polygon = PackedVector2Array(1500, 60, 1580, 30, 1700, 30, 1780, 60, 1850, 50, 1920, 80, 1940, 120, 1460, 120)
+
+[node name="DistantMountainLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.18, 0.05)
+motion_mirroring = Vector2(2400, 0)
+
+[node name="MountainBack" type="Polygon2D" parent="DistantMountainLayer"]
+color = Color(0.28, 0.42, 0.65, 0.85)
+polygon = PackedVector2Array(-200, 450, 250, 120, 700, 460, 1150, 160, 1600, 490, 2050, 180, 2600, 540, 2600, 1200, -200, 1200)
+
+[node name="MountainSnowCaps" type="Polygon2D" parent="DistantMountainLayer"]
+color = Color(0.88, 0.94, 1.0, 0.9)
+polygon = PackedVector2Array(210, 170, 250, 120, 290, 170, 1110, 210, 1150, 160, 1190, 210, 2010, 220, 2050, 180, 2090, 220)
+
+[node name="MountainFront" type="Polygon2D" parent="DistantMountainLayer"]
+color = Color(0.22, 0.35, 0.55, 0.92)
+polygon = PackedVector2Array(50, 520, 420, 220, 820, 560, 1300, 260, 1750, 530, 2250, 280, 2600, 620, 2600, 1200, -200, 1200)
+
+[node name="MiddleHillLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.35, 0.12)
+motion_mirroring = Vector2(2400, 0)
+
+[node name="GreenHills" type="Polygon2D" parent="MiddleHillLayer"]
+color = Color(0.2, 0.5, 0.3, 0.95)
+polygon = PackedVector2Array(-200, 580, 320, 380, 820, 560, 1380, 410, 1880, 600, 2480, 430, 2600, 680, 2600, 1200, -200, 1200)
+
+[node name="NearFoliageLayer" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.65, 0.25)
+motion_mirroring = Vector2(2400, 0)
+
+[node name="ForestSilhouette" type="Polygon2D" parent="NearFoliageLayer"]
+color = Color(0.12, 0.38, 0.22, 0.98)
+polygon = PackedVector2Array(-100, 680, 150, 500, 400, 670, 700, 480, 950, 680, 1200, 490, 1500, 700, 1800, 510, 2100, 670, 2500, 510, 2600, 780, 2600, 1200, -200, 1200)

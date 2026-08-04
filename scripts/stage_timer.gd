@@ -8,7 +8,7 @@ signal time_updated(remaining: float)
 signal game_over()
 signal stage_cleared()
 
-@export var time_limit: float = 90.0              # 1분 30초
+@export var time_limit: float = 0.0              # 0 = 무제한 (임시 변경)
 
 var _remaining: float = 0.0
 var _finished: bool = false   # 시간 초과(게임오버) 또는 클리어로 더 이상 진행하지 않음
@@ -29,6 +29,10 @@ func resume_timer() -> void:
 
 func _process(delta: float) -> void:
 	if _finished or _manually_paused:
+		return
+
+	# time_limit이 0이면 무제한 모드
+	if time_limit <= 0.0:
 		return
 
 	_remaining = maxf(0.0, _remaining - delta)

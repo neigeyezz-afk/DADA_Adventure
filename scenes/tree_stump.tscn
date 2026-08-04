@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/tree_stump.gd" id="1_stump"]
+
+[node name="TreeStump" type="StaticBody2D"]
+collision_mask = 0
+script = ExtResource("1_stump")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]

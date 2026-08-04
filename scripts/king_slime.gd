@@ -6,19 +6,21 @@ const FloatingText = preload("res://scripts/floating_text.gd")
 ## KingSlime: Stage 3 보스형 대형 슬라임
 ## ==========================================================
 
-@export var max_health: int = 40
-@export var speed: float = 80.0
+@export var max_health: int = 20
+@export var speed: float = 20.0
 @export var chase_speed: float = 130.0
-@export var touch_damage: int = 2
+@export var touch_damage: int = 5
 
-var health: int = 40
+var health: int = 20
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var target: PlayerDADA = null
 var _can_touch: bool = true
-var _base_color: Color = Color(0.9, 0.2, 0.3)
+var _base_color: Color = Color(0.15, 0.48, 0.92)
 var _jump_cooldown: float = 2.5
+var _motion_phase: int = 0
+var _motion_timer: float = 0.0
+const MOTION_FRAME_TIME: float = 0.16
 
-@onready var body_rect: ColorRect = $ColorRect
 @onready var hurtbox: Hurtbox = $Hurtbox
 @onready var touch_area: Area2D = $TouchArea
 @onready var detection_zone: Area2D = $DetectionZone
@@ -32,30 +34,45 @@ func _ready() -> void:
 	touch_area.body_entered.connect(_on_touch_body)
 	detection_zone.body_entered.connect(_on_detection_entered)
 	detection_zone.body_exited.connect(_on_detection_exited)
-	body_rect.color = _base_color
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
-	
-	if target:
-		var dir := 1 if target.global_position.x > global_position.x else -1
-		velocity.x = dir * chase_speed
-		
-		# 보스 점프 강하 공격
-		_jump_cooldown -= delta
-		if _jump_cooldown <= 0.0 and is_on_floor():
-			_jump_cooldown = randf_range(2.0, 3.5)
-			velocity.y = -420.0
+
+	if target and is_instance_valid(target):
+		var dir_x := signf(target.global_position.x - global_position.x)
+		velocity.x = dir_x * chase_speed
 	else:
 		velocity.x = 0.0
 
+	_motion_timer += delta
+	if _motion_timer >= MOTION_FRAME_TIME:
+		_motion_timer = 0.0
+		_motion_phase = (_motion_phase + 1) % 4
+		_apply_squish(_motion_phase)
+
 	move_and_slide()
 
-func _on_hit_received(damage: int, dir: Vector2) -> void:
+func _apply_squish(phase: int) -> void:
+	var pivot := get_node_or_null("VisualPivot") as Node2D
+	if not pivot:
+		return
+	match phase:
+		0:
+			pivot.scale = Vector2(1.0, 1.0)
+		1:
+			pivot.scale = Vector2(1.15, 0.85)
+		2:
+			pivot.scale = Vector2(1.0, 1.0)
+		3:
+			pivot.scale = Vector2(0.88, 1.12)
+
+func take_damage(damage: int, attacker_pos: Vector2 = Vector2.ZERO) -> void:
+	var dir := global_position - attacker_pos
+	_on_hit_received(damage, dir)
+
+func _on_hit_received(damage: int, _dir: Vector2) -> void:
 	health -= damage
-	velocity.x = signf(dir.x) * 120.0
-	velocity.y = -100.0
 	if SoundManager:
 		SoundManager.play_hit()
 	FloatingText.spawn(get_parent(), global_position, "-%d BOSS" % damage, Color(1, 0.4, 0.2))
@@ -64,27 +81,32 @@ func _on_hit_received(damage: int, dir: Vector2) -> void:
 		_die()
 
 func _flash() -> void:
-	body_rect.color = Color(1, 1, 1)
-	await get_tree().create_timer(0.1).timeout
-	body_rect.color = _base_color
+	var body_node := get_node_or_null("VisualPivot/BodyRect") as ColorRect
+	if body_node:
+		body_node.color = Color(1, 1, 1)
+		await get_tree().create_timer(0.1).timeout
+		body_node.color = _base_color
 
 func _die() -> void:
 	if SoundManager:
 		SoundManager.play_chest_open()
 	FloatingText.spawn(get_parent(), global_position, "BOSS DEFEATED!", Color(1.0, 0.85, 0.1))
 	
-	# 대량 보상 드롭
+	# 대량 골드 드롭 (80 골드)
 	for i in range(8):
 		var p := PICKUP_SCENE.instantiate() as Pickup
 		get_parent().add_child(p)
 		p.global_position = global_position + Vector2(randf_range(-30, 30), -20)
 		p.setup("gold", 10)
 
-	for i in range(5):
+	# Stage 1 랜덤 드롭 재료 10개 드롭
+	var stage1_mats := ["water", "oil", "veg_stock", "seafood_stock", "bone_stock", "noodle_dough", "firewood", "potato_dough", "konjac_dough"]
+	for i in range(10):
 		var m := PICKUP_SCENE.instantiate() as Pickup
 		get_parent().add_child(m)
-		m.global_position = global_position + Vector2(randf_range(-30, 30), -25)
-		m.setup("material", 2, "noodle" if i % 2 == 0 else "cheese")
+		m.global_position = global_position + Vector2(randf_range(-35, 35), -25)
+		var rand_mat: String = stage1_mats[randi() % stage1_mats.size()]
+		m.setup("material", 1, rand_mat)
 
 	queue_free()
 

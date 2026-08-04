@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://playerpotknight0001"
-valid=false
+uid="uid://cn7obyrd8f8vc"
+path="res://.godot/imported/player Pot Knight.png-43599c6629a22275ad2dccce02ade800.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://assets/sprites/player Pot Knight.png"
+dest_files=["res://.godot/imported/player Pot Knight.png-43599c6629a22275ad2dccce02ade800.ctex"]
 
 [params]
 

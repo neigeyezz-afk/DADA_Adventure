@@ -42,11 +42,11 @@ var pot_index: int = 0
 var ramen_completed: int = 0
 var unlocked_recipes: Array[String] = ["Basic Ramen"]
 const RECIPES: Dictionary = {
-	"Basic Ramen": {"required_pot_level": 1, "required_materials": 3, "cook_time": 6.0, "description": "순정라면 (Req: Pot Lv1)"},
-	"Cheese Ramen": {"required_pot_level": 3, "required_materials": 5, "cook_time": 8.0, "description": "치즈라면 (Req: Pot Lv3)"},
-	"Kimchi Ramen": {"required_pot_level": 4, "required_materials": 6, "cook_time": 9.0, "description": "김치라면 (Req: Pot Lv4)"},
-	"Seafood Ramen": {"required_pot_level": 5, "required_materials": 7, "cook_time": 10.0, "description": "해물라면 (Req: Pot Lv5)"},
-	"Beef Ramen": {"required_pot_level": 6, "required_materials": 8, "cook_time": 11.0, "description": "고기라면 (Req: Pot Lv6)"},
+	"Basic Ramen": {"required_pot_level": 1, "required_materials": 2, "cook_time": 6.0, "description": "순정라면 (물 + 밀가루반죽 / Req: Pot Lv1)", "sell_price": 50},
+	"Vegetable Ramen": {"required_pot_level": 3, "required_materials": 3, "cook_time": 8.0, "description": "채소라면 (물 + 밀가루반죽 + 채소육수 / Req: Pot Lv3)", "sell_price": 80},
+	"Potato Ramen": {"required_pot_level": 4, "required_materials": 3, "cook_time": 9.0, "description": "감자라면 (물 + 감자반죽 + 기름 / Req: Pot Lv4)", "sell_price": 100},
+	"Seafood Ramen": {"required_pot_level": 5, "required_materials": 3, "cook_time": 10.0, "description": "해물라면 (물 + 밀가루반죽 + 해물육수 / Req: Pot Lv5)", "sell_price": 130},
+	"Beef Konjac Ramen": {"required_pot_level": 6, "required_materials": 3, "cook_time": 11.0, "description": "고기곤약라면 (물 + 곤약반죽 + 고기육수 / Req: Pot Lv6)", "sell_price": 160},
 }
 
 # --- 상점(푸르지아) 재산(Wealth) 경험치: 기획서 2.3 단계별 성장 ---
@@ -57,7 +57,7 @@ const WEALTH_EXP_PER_LEVEL: int = 100
 # --- 무기 티어 (기획서 3.2: 리치와 데미지가 실제로 커진다) ---
 # name / damage / reach(히트박스 길이 px) / price(골드) / color(화이트박스 색)
 const WEAPONS: Array[Dictionary] = [
-	{"name": "Old Shortsword", "damage": 1, "reach": 30.0, "price": 0, "color": Color(0.55, 0.6, 0.7)},
+	{"name": "Old Shortsword", "damage": 1, "reach": 30.0, "price": 0, "color": Color(0.72, 0.58, 0.32)},
 	{"name": "Steel Longsword", "damage": 2, "reach": 48.0, "price": 40, "color": Color(0.8, 0.86, 0.98)},
 	{"name": "Dwarven Greatsword", "damage": 4, "reach": 70.0, "price": 120, "color": Color(1.0, 0.78, 0.2)},
 ]
