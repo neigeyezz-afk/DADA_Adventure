@@ -5,9 +5,7 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
 		<title>DADA_Adventure</title>
 		<style>
-html, body {
-	width: 100%;
-	height: 100%;
+html, body, #canvas {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -21,8 +19,6 @@ body {
 }
 
 #canvas {
-	width: 100%;
-	height: 100%;
 	display: block;
 }
 
@@ -94,8 +90,8 @@ body {
 	z-index: 1;
 }
 		</style>
-		<link id="-gd-engine-icon" rel="icon" type="image/png" href="DADA_Adventure.icon.png" />
-<link rel="apple-touch-icon" href="DADA_Adventure.apple-touch-icon.png"/>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
 
 	</head>
 	<body>
@@ -108,14 +104,14 @@ body {
 		</noscript>
 
 		<div id="status">
-			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="DADA_Adventure.png" alt="">
+			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="">
 			<progress id="status-progress"></progress>
 			<div id="status-notice"></div>
 		</div>
 
-		<script src="DADA_Adventure.js"></script>
+		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"DADA_Adventure","experimentalVK":false,"fileSizes":{"DADA_Adventure.pck":14309624,"DADA_Adventure.wasm":37896978},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":14310056,"index.wasm":37896978},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -221,3 +217,4 @@ const engine = new Engine(GODOT_CONFIG);
 		</script>
 	</body>
 </html>
+
