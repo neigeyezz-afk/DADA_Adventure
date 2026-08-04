@@ -17,6 +17,9 @@ const CONFIG_PATH: String = "user://google_config.json"
 @onready var api_key_edit: LineEdit = $GoogleDialog/VBox/ConfigBox/ApiKeyEdit
 @onready var web_oauth_btn: Button = $GoogleDialog/VBox/WebOAuthButton
 
+## 구글 로그인 기능 활성화 여부 토글 (true: 로그인 사용, false: 로그인 기능 비활성화 및 비노출)
+const ENABLE_GOOGLE_LOGIN: bool = false
+
 var _logged_in: bool = false
 var _user_name: String = ""
 var _user_email: String = ""
@@ -27,12 +30,13 @@ var google_client_id: String = ""
 var google_api_key: String = ""
 
 func _ready() -> void:
-	_load_google_config()
-	_restore_saved_session()
+	if ENABLE_GOOGLE_LOGIN:
+		_load_google_config()
+		_restore_saved_session()
+		_check_web_oauth_return()
 	_setup_background()
 	_setup_google_icon()
 	_connect_signals()
-	_check_web_oauth_return()
 	_update_ui_state()
 
 func _restore_saved_session() -> void:
@@ -43,7 +47,7 @@ func _restore_saved_session() -> void:
 			_user_email = GameState.user_email
 
 func _process(_delta: float) -> void:
-	if _is_listening_oauth and _tcp_server and _tcp_server.is_connection_available():
+	if ENABLE_GOOGLE_LOGIN and _is_listening_oauth and _tcp_server and _tcp_server.is_connection_available():
 		var peer: StreamPeerTCP = _tcp_server.take_connection()
 		if peer:
 			_handle_oauth_callback(peer)
@@ -216,6 +220,20 @@ func _register_external_google_user(u_name: String, email: String, _user_id: Str
 	_update_ui_state()
 
 func _update_ui_state() -> void:
+	if not ENABLE_GOOGLE_LOGIN:
+		if is_instance_valid(google_login_btn):
+			google_login_btn.visible = false
+		if is_instance_valid(user_status_label):
+			user_status_label.visible = false
+		if is_instance_valid(google_dialog):
+			google_dialog.visible = false
+		return
+
+	if is_instance_valid(google_login_btn):
+		google_login_btn.visible = true
+	if is_instance_valid(user_status_label):
+		user_status_label.visible = true
+
 	if _logged_in:
 		user_status_label.text = "Logged in: %s (%s)" % [_user_name, _user_email]
 		user_status_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.5))

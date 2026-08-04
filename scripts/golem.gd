@@ -345,9 +345,16 @@ func _die() -> void:
 	queue_free()
 
 func _spawn_pickup(kind: String, amount: int, offset: Vector2, material_name_override: String = "") -> void:
+	var pos := global_position + offset
+	call_deferred("_deferred_spawn_pickup", kind, amount, pos, material_name_override)
+
+func _deferred_spawn_pickup(kind: String, amount: int, pos: Vector2, material_name_override: String) -> void:
+	var parent_node := get_parent()
+	if not is_instance_valid(parent_node):
+		return
 	var p := PICKUP_SCENE.instantiate() as Pickup
-	get_parent().add_child(p)
-	p.global_position = global_position + offset
+	parent_node.add_child(p)
+	p.global_position = pos
 	p.setup(kind, amount, material_name_override)
 
 func _on_touch_body(body: Node2D) -> void:

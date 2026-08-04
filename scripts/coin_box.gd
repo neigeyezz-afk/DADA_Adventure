@@ -123,11 +123,14 @@ func _on_hit(_damage: int = 1, _dir: Vector2 = Vector2.ZERO) -> void:
 	_draw_box_graphics()
 	
 	for i in coin_count:
-		var p := PICKUP_SCENE.instantiate() as Pickup
-		var parent_node := get_parent()
-		if parent_node:
-			parent_node.add_child(p)
-		else:
-			add_child(p)
-		p.global_position = global_position + Vector2(randf_range(-14, 14), -18)
-		p.setup("gold", coin_value)
+		var pos := global_position + Vector2(randf_range(-14, 14), -18)
+		call_deferred("_deferred_spawn_coin", pos)
+
+func _deferred_spawn_coin(pos: Vector2) -> void:
+	var parent_node := get_parent()
+	if not is_instance_valid(parent_node):
+		return
+	var p := PICKUP_SCENE.instantiate() as Pickup
+	parent_node.add_child(p)
+	p.global_position = pos
+	p.setup("gold", coin_value)

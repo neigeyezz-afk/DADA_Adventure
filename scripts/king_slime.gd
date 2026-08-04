@@ -93,21 +93,28 @@ func _die() -> void:
 	
 	# 대량 골드 드롭 (80 골드)
 	for i in range(8):
-		var p := PICKUP_SCENE.instantiate() as Pickup
-		get_parent().add_child(p)
-		p.global_position = global_position + Vector2(randf_range(-30, 30), -20)
-		p.setup("gold", 10)
+		_spawn_pickup("gold", 10, Vector2(randf_range(-30, 30), -20))
 
 	# Stage 1 랜덤 드롭 재료 10개 드롭
 	var stage1_mats := ["water", "oil", "veg_stock", "seafood_stock", "bone_stock", "noodle_dough", "firewood", "potato_dough", "konjac_dough"]
 	for i in range(10):
-		var m := PICKUP_SCENE.instantiate() as Pickup
-		get_parent().add_child(m)
-		m.global_position = global_position + Vector2(randf_range(-35, 35), -25)
 		var rand_mat: String = stage1_mats[randi() % stage1_mats.size()]
-		m.setup("material", 1, rand_mat)
+		_spawn_pickup("material", 1, Vector2(randf_range(-35, 35), -25), rand_mat)
 
 	queue_free()
+
+func _spawn_pickup(kind: String, amount: int, offset: Vector2, material_name_override: String = "") -> void:
+	var pos := global_position + offset
+	call_deferred("_deferred_spawn_pickup", kind, amount, pos, material_name_override)
+
+func _deferred_spawn_pickup(kind: String, amount: int, pos: Vector2, material_name_override: String) -> void:
+	var parent_node := get_parent()
+	if not is_instance_valid(parent_node):
+		return
+	var p := PICKUP_SCENE.instantiate() as Pickup
+	parent_node.add_child(p)
+	p.global_position = pos
+	p.setup(kind, amount, material_name_override)
 
 func _on_touch_body(body: Node2D) -> void:
 	if body is PlayerDADA and _can_touch:
