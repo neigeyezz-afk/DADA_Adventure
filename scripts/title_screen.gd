@@ -73,6 +73,10 @@ func _load_title_background() -> Texture2D:
 		"res://assets/sprites/DADA_Adventure.png"
 	]
 	for path in candidate_paths:
+		if ResourceLoader.exists(path):
+			var res = load(path)
+			if res is Texture2D:
+				return res as Texture2D
 		var global_p := ProjectSettings.globalize_path(path)
 		if global_p != "" and FileAccess.file_exists(global_p):
 			var img := Image.new()
@@ -227,6 +231,20 @@ func _update_ui_state() -> void:
 			user_status_label.visible = false
 		if is_instance_valid(google_dialog):
 			google_dialog.visible = false
+		if is_instance_valid(new_game_btn):
+			new_game_btn.text = "🎮 게임 시작"
+			new_game_btn.flat = false
+			new_game_btn.visible = true
+			new_game_btn.anchors_preset = Control.PRESET_CENTER_BOTTOM
+			new_game_btn.anchor_left = 0.5
+			new_game_btn.anchor_right = 0.5
+			new_game_btn.anchor_top = 1.0
+			new_game_btn.anchor_bottom = 1.0
+			new_game_btn.offset_left = -140.0
+			new_game_btn.offset_right = 140.0
+			new_game_btn.offset_top = -120.0
+			new_game_btn.offset_bottom = -60.0
+			new_game_btn.add_theme_font_size_override("font_size", 22)
 		return
 
 	if is_instance_valid(google_login_btn):
