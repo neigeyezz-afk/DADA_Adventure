@@ -1,7 +1,6 @@
 extends CharacterBody2D
 class_name KingSlime
 
-const FloatingText = preload("res://scripts/floating_text.gd")
 ## ==========================================================
 ## KingSlime: Stage 3 보스형 대형 슬라임
 ## ==========================================================

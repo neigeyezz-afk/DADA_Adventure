@@ -2,7 +2,6 @@ extends Area2D
 class_name Pickup
 ## 몬스터 사망/숨겨진 요소에서 튀어나오는 획득물. 플레이어와 닿으면 자동 획득.
 
-const FloatingText = preload("res://scripts/floating_text.gd")
 
 var kind: String = "material"
 var amount: int = 1

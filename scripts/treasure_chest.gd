@@ -6,8 +6,6 @@ class_name TreasureChest
 ## 레퍼런스 이미지 1~4 기반 고품질 픽셀 디자인 + QTE 키 입력 연동
 ## ==========================================================
 
-const FloatingText = preload("res://scripts/floating_text.gd")
-
 @export var reward_gold: int = 50
 @export var recipe_unlock: String = ""
 

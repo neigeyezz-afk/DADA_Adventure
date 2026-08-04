@@ -1,7 +1,6 @@
 extends CharacterBody2D
 class_name EnemyMole
 
-const FloatingText = preload("res://scripts/floating_text.gd")
 
 @export var max_health: int = 8
 @export var touch_damage: int = 2

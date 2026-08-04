@@ -1,10 +1,10 @@
 [gd_scene load_steps=12 format=3 uid="uid://c6townstage123"]
 
-[ext_resource type="Script" uid="uid://c7townstagescript" path="res://scripts/town_stage.gd" id="1_town"]
-[ext_resource type="PackedScene" uid="uid://b00g80x3a6l8w" path="res://scenes/parallax_background.tscn" id="2_bg"]
+[ext_resource type="Script" path="res://scripts/town_stage.gd" id="1_town"]
+[ext_resource type="PackedScene" path="res://scenes/parallax_background.tscn" id="2_bg"]
 [ext_resource type="PackedScene" uid="uid://i58iihdhelcr" path="res://scenes/dada.tscn" id="3_dada"]
-[ext_resource type="PackedScene" uid="uid://bb0h40b1gq22m" path="res://scenes/hud.tscn" id="4_hud"]
-[ext_resource type="PackedScene" uid="uid://i13shopen123" path="res://scenes/shop_entrance.tscn" id="5_shop"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://scenes/shop_entrance.tscn" id="5_shop"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_townfloor"]
 size = Vector2(1600, 800)

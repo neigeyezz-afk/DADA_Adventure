@@ -1,7 +1,6 @@
 extends Node2D
 class_name FlowerMob
 
-const FloatingText = preload("res://scripts/floating_text.gd")
 const PICKUP_SCENE: PackedScene = preload("res://scenes/pickup.tscn")
 
 @export var flower_type: int = 1 # 1: Sky Blue Flower, 2: White Daisy, 3: Golden Cluster, 4: Orange Blossom

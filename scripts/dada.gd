@@ -1,8 +1,6 @@
 extends CharacterBody2D
 class_name PlayerDADA
 
-const FloatingText = preload("res://scripts/floating_text.gd")
-
 # ==========================================================
 # 1. 이동 및 물리 상수
 # ==========================================================
@@ -639,8 +637,8 @@ func _on_sword_area_entered(area: Area2D) -> void:
 	if not is_instance_valid(area):
 		return
 	var hurtbox = area as Hurtbox
-	var parent_node := area.get_parent()
-	var target_owner := hurtbox.owner if (hurtbox and is_instance_valid(hurtbox.owner)) else parent_node
+	var parent_node: Node = area.get_parent()
+	var target_owner: Node = hurtbox.owner if (hurtbox and is_instance_valid(hurtbox.owner)) else parent_node
 
 	if target_owner == self or (is_instance_valid(target_owner) and target_owner in _already_hit):
 		return

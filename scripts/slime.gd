@@ -1,7 +1,6 @@
 extends CharacterBody2D
 class_name EnemySlime
 
-const FloatingText = preload("res://scripts/floating_text.gd")
 
 @export var speed: float = 56.0
 @export var chase_speed: float = 98.0
